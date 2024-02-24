@@ -20,6 +20,10 @@ class UserController {
 
         const { name, email, password_hash, admin } = req.body
 
+        const emailExists = await User.findOne({ where: { email } })
+
+        if (emailExists) return res.status(400).json({ error: "Email already registered" })
+
         const user = await User.create({
             id: v4(),
             name,
