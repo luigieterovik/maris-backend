@@ -17,6 +17,10 @@ class User extends Model {
             if(user.password) user.password_hash = await bcrypt.hash(user.password, 10)
         })
     }
+
+    checkPassword(password) {
+        return bcrypt.compare(password, this.password_hash)
+    }
 }
 
 export default User
