@@ -32,6 +32,8 @@ class UserController {
             admin
         })
 
+        if (!user) return res.status(500).json({ error: "Failed to create user" })
+
         return res.status(201).json({ id: user.id, name, email, admin })
     }
 }

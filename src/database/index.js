@@ -16,4 +16,4 @@ class Database {
     }
 }
 
-export default new Database() // instanciado ao ser importado
+export default new Database()
