@@ -9,9 +9,7 @@ class User extends Model {
             password: Sequelize.VIRTUAL,
             password_hash: Sequelize.STRING,
             admin: Sequelize.BOOLEAN
-        }, {
-            sequelize,
-        })
+        }, { sequelize })
 
         this.addHook('beforeSave', async(user) => user.password_hash = await bcrypt.hash(user.password, 10))
     }

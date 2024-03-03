@@ -1,5 +1,7 @@
 import * as Yup from 'yup'
 
+import Product from '../models/Product'
+
 class ProductController {
     async store(req, res) {
         const schema = Yup.object().shape({
@@ -13,8 +15,26 @@ class ProductController {
         } catch(err) {
             return res.status(400).json({ error: err.errors })
         }
+        
+        const { filename: path } = req.file
+        const { name, description, price } = req.body
 
-        return res.json({ ok: true })
+        const product = await Product.create({
+            name,
+            description,
+            price,
+            path
+        })
+
+        if (!product) return res.status(500).json({ error: "Failed to create user "})
+
+        return res.status(201).json(product)
+    }
+
+    async index(req, res) {
+        const products = await Product.findAll()
+
+        return res.json(products)
     }
 }
 
