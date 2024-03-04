@@ -1,6 +1,6 @@
-import { v4 } from 'uuid';
+import crypto from 'crypto';
 
-const secret = process.env.JWT_SECRET || v4();
+const secret = process.env.JWT_SECRET || crypto.randomBytes(32).toString('hex');
 
 export default {
     secret,
