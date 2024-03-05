@@ -2,7 +2,7 @@ import express from 'express'
 import routes from './routes'
 import { resolve } from 'path'
 
-import './database' // importando para instanciar classe
+import './database' // importando o index.js com classe instanciado
 
 class App {
   constructor() {
