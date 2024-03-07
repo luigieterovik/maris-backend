@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -26,10 +26,10 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false
       }
-    });
+    })
   },
 
   async down (queryInterface) {
-    await queryInterface.dropTable('Categories');
+    await queryInterface.dropTable('Categories')
   }
-};
+}

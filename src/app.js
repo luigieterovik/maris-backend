@@ -5,19 +5,19 @@ import { resolve } from 'path'
 import './database' // importando o index.js com classe instanciado
 
 class App {
-  constructor() {
+  constructor () {
     this.app = express()
 
     this.middlewares()
     this.routes()
   }
 
-  middlewares() {
+  middlewares () {
     this.app.use(express.json())
     this.app.use('/product-file', express.static(resolve(__dirname, '..', 'uploads')))
   }
 
-  routes() {
+  routes () {
     this.app.use(routes)
   }
 }
