@@ -1,6 +1,6 @@
-import * as Yup from "yup"
+import * as Yup from 'yup'
 
-import Product from "../models/Product"
+import Product from '../models/Product'
 
 class ProductController {
   async store(req, res) {
@@ -27,7 +27,7 @@ class ProductController {
     })
 
     if (!product)
-      return res.status(500).json({ error: "Failed to create user" })
+      return res.status(500).json({ error: 'Failed to create user' })
 
     return res.status(201).json(product)
   }

@@ -4,12 +4,12 @@ import * as Yup from 'yup'
 import User from '../models/User'
 
 class UserController {
-  async store (req, res) {
+  async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
       email: Yup.string().email().required(),
       password: Yup.string().min(6).required(),
-      admin: Yup.boolean()
+      admin: Yup.boolean(),
     })
 
     try {
@@ -22,14 +22,15 @@ class UserController {
 
     const emailExists = await User.findOne({ where: { email } })
 
-    if (emailExists) return res.status(400).json({ error: 'Email already registered' })
+    if (emailExists)
+      return res.status(400).json({ error: 'Email already registered' })
 
     const user = await User.create({
       id: v4(),
       name,
       email,
       password,
-      admin
+      admin,
     })
 
     if (!user) return res.status(500).json({ error: 'Failed to create user' })

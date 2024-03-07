@@ -3,7 +3,7 @@ import * as Yup from 'yup'
 import Category from '../models/Category'
 
 class CategoryController {
-  async store (req, res) {
+  async store(req, res) {
     const schema = Yup.object().shape({ name: Yup.string().required() })
 
     try {
@@ -16,16 +16,18 @@ class CategoryController {
 
     const categoryExists = await Category.findOne({ where: { name } })
 
-    if (categoryExists) return res.status(400).json({ error: 'Category already registered' })
+    if (categoryExists)
+      return res.status(400).json({ error: 'Category already registered' })
 
     const category = await Category.create({ name })
 
-    if (!category) return res.status(500).json({ message: 'Failed to create category' })
+    if (!category)
+      return res.status(500).json({ message: 'Failed to create category' })
 
     return res.status(201).json({ id: category.id, name })
   }
 
-  async index (req, res) {
+  async index(req, res) {
     const categories = await Category.findAll()
 
     return res.json(categories)
