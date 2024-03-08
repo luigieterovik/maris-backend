@@ -1,6 +1,7 @@
 import * as Yup from 'yup'
 
 import Product from '../models/Product'
+import Category from '../models/Category'
 
 class ProductController {
   async store(req, res) {
@@ -8,6 +9,7 @@ class ProductController {
       name: Yup.string().required(),
       description: Yup.string(),
       price: Yup.number().required(),
+      categoryId: Yup.number(),
     })
 
     try {
@@ -17,13 +19,14 @@ class ProductController {
     }
 
     const { filename: path } = req.file
-    const { name, description, price } = req.body
+    const { name, description, price, categoryId } = req.body
 
     const product = await Product.create({
       name,
       description,
       price,
       path,
+      categoryId,
     })
 
     if (!product)
@@ -33,7 +36,15 @@ class ProductController {
   }
 
   async index(req, res) {
-    const products = await Product.findAll()
+    const products = await Product.findAll({
+      include: [
+        {
+          model: Category,
+          as: 'category',
+          attributes: ['name'],
+        },
+      ],
+    })
 
     return res.json(products)
   }
