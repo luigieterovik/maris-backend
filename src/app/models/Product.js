@@ -26,6 +26,12 @@ class Product extends Model {
       foreignKey: 'categoryId',
       as: 'category',
     })
+
+    this.belongsToMany(models.Users, {
+      through: 'Orders',
+      as: 'orders',
+      foreignKey: 'productId',
+    })
   }
 }
 
