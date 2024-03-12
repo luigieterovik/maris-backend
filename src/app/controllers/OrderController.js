@@ -1,9 +1,10 @@
 import * as Yup from 'yup'
 
+import Order from '../models/'
+
 class OrderController {
   async store(req, res) {
     const schema = Yup.object().shape({
-      userId: Yup.number().required(),
       productId: Yup.number().required(),
       quantity: Yup.number().required(),
     })
@@ -14,7 +15,25 @@ class OrderController {
       return res.status(400).json({ error: err.errors })
     }
 
-    return res
+    const { userId, productId, quantity } = req.body
+    const order = { userId, productId, quantity, status: 'Pedido realizado' }
+
+    const orderResponse = await Order.create(order)
+
+    if (!orderResponse)
+      return res.status(500).json({ error: 'Failed to create products' })
+
+    return res.status(201).json(orderResponse)
+  }
+
+  async index(req, res) {
+    const orders = await Order.findall({
+      include: [
+        {
+          model: 
+        }
+      ]
+    })
   }
 }
 

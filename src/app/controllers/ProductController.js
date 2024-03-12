@@ -21,7 +21,7 @@ class ProductController {
     const { filename: path } = req.file
     const { name, description, price, categoryId } = req.body
 
-    const product = await Product.create({
+    const productResponse = await Product.create({
       name,
       description,
       price,
@@ -29,10 +29,10 @@ class ProductController {
       categoryId,
     })
 
-    if (!product)
-      return res.status(500).json({ error: 'Failed to create user' })
+    if (!productResponse)
+      return res.status(500).json({ error: 'Failed to create products' })
 
-    return res.status(201).json(product)
+    return res.status(201).json(productResponse)
   }
 
   async index(req, res) {
