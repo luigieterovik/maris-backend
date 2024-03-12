@@ -1,6 +1,9 @@
 import * as Yup from 'yup'
 
-import Order from '../models/'
+import Order from '../models/Order'
+import User from '../models/User'
+import Product from '../models/Product'
+import Category from '../models/Category'
 
 class OrderController {
   async store(req, res) {
@@ -15,8 +18,22 @@ class OrderController {
       return res.status(400).json({ error: err.errors })
     }
 
-    const { userId, productId, quantity } = req.body
-    const order = { userId, productId, quantity, status: 'Pedido realizado' }
+    const { productId, quantity } = req.body
+
+    const { dataValues } = await Product.findOne({
+      attributes: ['price'],
+      where: { id: productId },
+    })
+
+    const subTotal = dataValues.price * quantity
+
+    const order = {
+      userId: req.userId,
+      productId,
+      quantity,
+      status: 'Pedido realizado',
+      subTotal,
+    }
 
     const orderResponse = await Order.create(order)
 
@@ -27,14 +44,30 @@ class OrderController {
   }
 
   async index(req, res) {
-    const orders = await Order.findall({
+    const orders = await Order.findAll({
       include: [
         {
-          model: 
-        }
-      ]
+          model: User,
+          as: 'user',
+          attributes: ['name', 'email'],
+        },
+        {
+          model: Product,
+          as: 'product',
+          attributes: ['name', 'price', 'path'],
+          include: [
+            {
+              model: Category,
+              as: 'category',
+              attributes: ['name'],
+            },
+          ],
+        },
+      ],
     })
+
+    return res.json(orders)
   }
 }
 
-export default OrderController
+export default new OrderController()

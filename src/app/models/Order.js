@@ -8,11 +8,23 @@ class Order extends Model {
         productId: Sequelize.INTEGER,
         quantity: Sequelize.INTEGER,
         status: Sequelize.STRING,
+        subTotal: Sequelize.DECIMAL,
       },
       { sequelize },
     )
 
     return this
+  }
+
+  static associate(models) {
+    this.belongsTo(models.User, {
+      foreignKey: 'userId',
+      as: 'user',
+    })
+    this.belongsTo(models.Product, {
+      foreignKey: 'productId',
+      as: 'product',
+    })
   }
 }
 

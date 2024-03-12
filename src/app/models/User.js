@@ -28,7 +28,7 @@ class User extends Model {
   static associate(models) {
     this.belongsToMany(models.Product, {
       through: 'Orders',
-      as: 'orders',
+      as: 'products',
       foreignKey: 'userId',
     })
   }

@@ -1,5 +1,4 @@
 import Sequelize, { Model } from 'sequelize'
-
 class Product extends Model {
   static init(sequelize) {
     super.init(
@@ -27,9 +26,9 @@ class Product extends Model {
       as: 'category',
     })
 
-    this.belongsToMany(models.Users, {
+    this.belongsToMany(models.User, {
       through: 'Orders',
-      as: 'orders',
+      as: 'users',
       foreignKey: 'productId',
     })
   }

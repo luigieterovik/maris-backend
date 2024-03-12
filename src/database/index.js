@@ -1,12 +1,13 @@
 import Sequelize from 'sequelize'
 
+import configDatabase from '../config/database'
+
 import User from '../app/models/User'
 import Product from '../app/models/Product'
 import Category from '../app/models/Category'
+import Order from '../app/models/Order'
 
-import configDatabase from '../config/database'
-
-const models = [User, Product, Category]
+const models = [User, Product, Category, Order]
 
 class Database {
   constructor() {
