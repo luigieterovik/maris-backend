@@ -13,32 +13,29 @@ class OrderController {
     })
 
     try {
-      await schema.validateSync(req.body, { abortEarly: false })
+      await schema.validate(req.body, { abortEarly: false })
     } catch (err) {
       return res.status(400).json({ error: err.errors })
     }
 
+    const { userId } = req
     const { productId, quantity } = req.body
 
-    const { dataValues } = await Product.findOne({
-      attributes: ['price'],
-      where: { id: productId },
-    })
+    const product = await Product.findByPk(productId)
+    if (!product) return res.status(401).json({ error: 'Product not found' })
 
-    const subTotal = dataValues.price * quantity
+    const total = product.price * quantity
 
-    const order = {
-      userId: req.userId,
+    const orderResponse = Order.create({
+      userId,
       productId,
       quantity,
       status: 'Pedido realizado',
-      subTotal,
-    }
-
-    const orderResponse = await Order.create(order)
+      total,
+    })
 
     if (!orderResponse)
-      return res.status(500).json({ error: 'Failed to create products' })
+      return res.status(500).json({ error: 'Failed to create order' })
 
     return res.status(201).json(orderResponse)
   }

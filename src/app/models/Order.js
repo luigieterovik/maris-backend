@@ -8,7 +8,7 @@ class Order extends Model {
         productId: Sequelize.INTEGER,
         quantity: Sequelize.INTEGER,
         status: Sequelize.STRING,
-        subTotal: Sequelize.DECIMAL,
+        total: Sequelize.DECIMAL,
       },
       { sequelize },
     )

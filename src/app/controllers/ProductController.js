@@ -30,7 +30,7 @@ class ProductController {
     })
 
     if (!productResponse)
-      return res.status(500).json({ error: 'Failed to create products' })
+      return res.status(500).json({ error: 'Failed to create product' })
 
     return res.status(201).json(productResponse)
   }
