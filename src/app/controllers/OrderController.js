@@ -65,6 +65,32 @@ class OrderController {
 
     return res.json(orders)
   }
+
+  async update(req, res) {
+    const schema = Yup.object().shape({
+      status: Yup.string(),
+    })
+
+    try {
+      schema.validateSync(req.body, { abortEarly: false })
+    } catch (err) {
+      return res.status(400).json({ error: err.errors })
+    }
+
+    const { id } = req.params
+    const { status } = req.body
+
+    const updateResponse = await Order.update({ status }, { where: { id } })
+
+    const orderExists = await Order.findOne({ where: { id } })
+    if (!orderExists)
+      return res.status(400).json({ error: 'Order does not exists' })
+
+    if (!updateResponse)
+      return res.status(500).json({ error: 'Failed to update response' })
+
+    return res.status(200).json({ message: 'Status updated' })
+  }
 }
 
 export default new OrderController()
