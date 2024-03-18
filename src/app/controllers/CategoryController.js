@@ -1,9 +1,16 @@
 import * as Yup from 'yup'
 
 import Category from '../models/Category'
+import User from '../models/User'
 
 class CategoryController {
   async store(req, res) {
+    const { admin: isAdmin } = await User.findByPk(req.userId)
+    if (!isAdmin)
+      return res
+        .status(401)
+        .json({ message: 'User is not authorized to access this resource' })
+
     const schema = Yup.object().shape({ name: Yup.string().required() })
 
     try {

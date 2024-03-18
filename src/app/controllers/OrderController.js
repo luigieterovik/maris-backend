@@ -26,7 +26,7 @@ class OrderController {
 
     const total = product.price * quantity
 
-    const orderResponse = Order.create({
+    const orderResponse = await Order.create({
       userId,
       productId,
       quantity,
@@ -67,6 +67,12 @@ class OrderController {
   }
 
   async update(req, res) {
+    const { admin: isAdmin } = await User.findByPk(req.userId)
+    if (!isAdmin)
+      return res
+        .status(401)
+        .json({ message: 'User is not authorized to access this resource' })
+
     const schema = Yup.object().shape({
       status: Yup.string(),
     })
