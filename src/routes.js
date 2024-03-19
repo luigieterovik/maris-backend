@@ -20,6 +20,7 @@ routes.post('/sessions', SessionController.store)
 routes.use(authMiddleware)
 
 routes.post('/catalog', upload.single('file'), ProductController.store)
+routes.put('/catalog/:id', upload.single('file'), ProductController.update)
 routes.get('/catalog', ProductController.index)
 
 routes.post('/categories', CategoryController.store)
