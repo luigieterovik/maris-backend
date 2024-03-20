@@ -80,9 +80,9 @@ class ProductController {
     }
 
     const { id } = req.params
-    const productsExists = await Product.findByPk(id)
+    const productExists = await Product.findByPk(id)
 
-    if (!productsExists)
+    if (!productExists)
       return res.status(400).json({ message: 'Product not found' })
 
     let path
@@ -90,10 +90,14 @@ class ProductController {
 
     const { name, description, price, categoryId, offer } = req.body
 
-    const updateResponse = await Product.update(
-      { name, description, price, categoryId, offer, path },
-      { where: { id } },
-    )
+    const updateResponse = await Product.update({
+      name,
+      description,
+      price,
+      categoryId,
+      offer,
+      path,
+    })
 
     if (!updateResponse)
       return res.status(500).json({ error: 'Failed to update product' })
