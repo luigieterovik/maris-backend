@@ -90,14 +90,17 @@ class ProductController {
 
     const { name, description, price, categoryId, offer } = req.body
 
-    const updateResponse = await Product.update({
-      name,
-      description,
-      price,
-      categoryId,
-      offer,
-      path,
-    })
+    const updateResponse = await Product.update(
+      {
+        name,
+        description,
+        price,
+        categoryId,
+        offer,
+        path,
+      },
+      { where: { id } },
+    )
 
     if (!updateResponse)
       return res.status(500).json({ error: 'Failed to update product' })

@@ -68,7 +68,10 @@ class CategoryController {
 
     const { name } = req.body
 
-    const updateResponse = await Category.update({ name, path })
+    const updateResponse = await Category.update(
+      { name, path },
+      { where: { id } },
+    )
 
     if (!updateResponse)
       return res.status(500).json({ error: 'Failed to update category' })
