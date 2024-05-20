@@ -9,6 +9,7 @@ import SessionController from './app/controllers/SessionController'
 import ProductController from './app/controllers/ProductController'
 import CategoryController from './app/controllers/CategoryController'
 import OrderController from './app/controllers/OrderController'
+import RecoverController from './app/controllers/RecoverController'
 
 const upload = multer(multerConfig)
 
@@ -20,6 +21,7 @@ routes.get('/', (req, res) => {
 
 routes.post('/users', UserController.store)
 routes.post('/sessions', SessionController.store)
+routes.post('/recover', RecoverController.store)
 
 routes.use(authMiddleware)
 

@@ -25,6 +25,11 @@ class User extends Model {
     return bcrypt.compare(password, this.password_hash)
   }
 
+  async updatePassword(newPassword) {
+    this.password_hash = await bcrypt.hash(newPassword, 10)
+    await this.save()
+  }
+
   static associate(models) {
     this.belongsToMany(models.Product, {
       through: 'Orders',

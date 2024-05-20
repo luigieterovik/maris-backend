@@ -1,5 +1,8 @@
 import { v4 } from 'uuid'
 import * as Yup from 'yup'
+import jwt from 'jsonwebtoken'
+
+import authConfig from '../../config/auth'
 
 import User from '../models/User'
 
@@ -36,6 +39,36 @@ class UserController {
     if (!user) return res.status(500).json({ error: 'Failed to create user' })
 
     return res.status(201).json({ id: user.id, name, email, admin })
+  }
+
+  async updatePassword(req, res) {
+    const schema = Yup.object().shape({
+      token: Yup.string().required(),
+      password: Yup.string().required().min(6),
+    })
+
+    if (!(await schema.isValid(req.body))) {
+      return res
+        .status(401)
+        .json({ error: 'Make sure your password is correct' })
+    }
+
+    const { token, password } = req.body
+
+    try {
+      const decoded = jwt.verify(token, authConfig.secret)
+      const { email } = decoded
+
+      const user = await User.findOne({ where: { email } })
+
+      if (!user) return res.status(404).json({ error: 'User not found' })
+
+      await user.updatePassword(password)
+
+      return res.json({ message: 'Password reset successfully' })
+    } catch (err) {
+      return res.status(401).json({ error: 'Invalid or expired token' })
+    }
   }
 }
 
