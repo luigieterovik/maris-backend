@@ -26,6 +26,8 @@ class RecoverController {
         expiresIn: '1h',
       })
 
+      console.log(token)
+
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -38,7 +40,7 @@ class RecoverController {
         from: 'eterowiczluigi@gmail.com',
         to: email,
         subject: `Maris's Boutik's — Password Reset`,
-        html: `You requested a password reset. Click <a href="http://localhost:3000/account/reset?token=${token}">here</a> to reset your password.`,
+        html: `You requested a password reset. Click <a href="http://localhost:3000/account/reset/${token}">here</a> to reset your password.`,
       }
 
       transporter.sendMail(mailOptions, (error, info) => {

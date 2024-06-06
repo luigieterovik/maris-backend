@@ -26,7 +26,7 @@ class User extends Model {
   }
 
   async updatePassword(newPassword) {
-    this.password_hash = await bcrypt.hash(newPassword, 10)
+    this.password = newPassword
     await this.save()
   }
 
