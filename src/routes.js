@@ -24,7 +24,10 @@ routes.post('/users', UserController.store)
 routes.post('/sessions', SessionController.store)
 routes.post('/recover', RecoverController.store)
 routes.post('/reset', UserController.updatePassword)
-routes.post('/pay', PaymentController.store)
+routes.post('/pay', PaymentController.mercadopago)
+routes.post('/payStripe', PaymentController.stripe)
+routes.post('/pix', PaymentController.pix)
+routes.post('/notifications', PaymentController.handleNotification)
 
 routes.use(authMiddleware)
 
