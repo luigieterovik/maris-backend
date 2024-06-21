@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import { MercadoPagoConfig, Preference, Payment } from 'mercadopago'
+import { MercadoPagoConfig, Preference } from 'mercadopago'
 import dotenv from 'dotenv'
 import stripeLib from 'stripe'
 import request from 'request'
@@ -97,8 +97,9 @@ class PaymentController {
         return res.status(200).json(JSON.parse(body))
       })
     } catch (err) {
-      console.error(err)
-      return res.status(500).json({ error: 'Failed to create payment' })
+      return res
+        .status(500)
+        .json([{ error: 'Failed to create payment' }, { err }])
     }
   }
 
@@ -129,6 +130,7 @@ class PaymentController {
 
       const session = await stripe.checkout.sessions.create({
         line_items: lineItems,
+        payment_method_types: [req.body.method],
         mode: 'payment',
         success_url: 'http://localhost:3000',
         cancel_url: 'http://localhost:3000',
