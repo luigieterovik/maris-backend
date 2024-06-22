@@ -1,5 +1,5 @@
 module.exports = {
-  url: 'postgresql://postgres:kxTupDJHkSmxCovaMEMbpsQyeovrmIbA@roundhouse.proxy.rlwy.net:35301/railway',
+  url: 'https://maris-backend-production.up.railway.app',
   define: {
     timestamps: true,
     underscore: true,
