@@ -171,14 +171,14 @@ class PaymentController {
     }
   }
 
-  async handleStripeNotification(req, res) {
+  static async handleStripeNotification(req, res) {
     const stripe = stripeLib(process.env.ACCESS_TOKEN_STRIPE)
     const sig = req.headers['stripe-signature']
     let event
 
     try {
       event = stripe.webhooks.constructEvent(
-        req.rawBody,
+        req.body, // Use req.body para o corpo bruto
         sig,
         process.env.STRIPE_WEBHOOK_SECRET,
       )

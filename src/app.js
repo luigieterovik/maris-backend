@@ -16,6 +16,9 @@ class App {
 
     this.app.use(cors(corsOptions))
 
+    this.app.use(express.json())
+    this.app.use(express.urlencoded({ extended: true }))
+
     this.middlewares()
     this.routes()
   }
