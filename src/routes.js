@@ -27,7 +27,6 @@ routes.post('/reset', UserController.updatePassword)
 routes.post('/pay', PaymentController.mercadopago)
 routes.post('/payStripe', PaymentController.stripe)
 routes.post('/pix', PaymentController.pix)
-routes.post('/notifications', PaymentController.handleNotification)
 routes.post(
   '/webhook/mercadopago',
   PaymentController.handleMercadoPagoNotification,
