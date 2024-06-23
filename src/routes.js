@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import express, { Router } from 'express'
 import multer from 'multer'
 import multerConfig from './config/multer'
 
@@ -28,6 +28,15 @@ routes.post('/pay', PaymentController.mercadopago)
 routes.post('/payStripe', PaymentController.stripe)
 routes.post('/pix', PaymentController.pix)
 routes.post('/notifications', PaymentController.handleNotification)
+routes.post(
+  '/webhook/mercadopago',
+  PaymentController.handleMercadoPagoNotification,
+)
+routes.post(
+  '/webhook/stripe',
+  express.raw({ type: 'application/json' }),
+  PaymentController.handleStripeNotification,
+)
 
 routes.use(authMiddleware)
 

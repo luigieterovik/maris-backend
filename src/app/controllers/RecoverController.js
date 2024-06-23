@@ -31,16 +31,16 @@ class RecoverController {
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: 'eterowiczluigi@gmail.com',
-          pass: 'fhdfwealpyvfamhb',
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
         },
       })
 
       const mailOptions = {
-        from: 'eterowiczluigi@gmail.com',
+        from: process.env.EMAIL_USER,
         to: email,
-        subject: `Maris's Boutik's — Password Reset`,
-        html: `You requested a password reset. Click <a href="http://localhost:3000/account/reset/${token}">here</a> to reset your password.`,
+        subject: `Maris's Boutik's — Recuperação de senha`,
+        html: `Você solicitou recuperação de senha. Clique <a href="http://localhost:3001/account/reset/${token}">aqui</a> para recuperar sua senha.`,
       }
 
       transporter.sendMail(mailOptions, (error, info) => {

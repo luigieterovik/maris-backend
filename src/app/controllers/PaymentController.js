@@ -3,6 +3,7 @@ import { MercadoPagoConfig, Preference } from 'mercadopago'
 import dotenv from 'dotenv'
 import stripeLib from 'stripe'
 import request from 'request'
+import nodemailer from 'nodemailer'
 
 import { v4 } from 'uuid'
 
@@ -103,9 +104,33 @@ class PaymentController {
     }
   }
 
-  async handleNotification(req, res) {
+  async handleMercadoPagoNotification(req, res) {
     const notification = req.body
-    console.log('Received notification:', notification)
+
+    if (
+      notification.action === 'payment.created' ||
+      notification.action === 'payment.updated'
+    ) {
+      const paymentId = notification.data.id
+
+      // Obter os detalhes do pagamento usando a API do Mercado Pago
+      const client = new MercadoPagoConfig({
+        accessToken: process.env.ACCESS_TOKEN_MERCADOPAGO,
+      })
+
+      try {
+        const payment = await client.get(`/v1/payments/${paymentId}`)
+
+        if (payment.status === 'approved') {
+          // Registrar os dados no banco de dados
+          // Exemplo: savePayment(payment);
+
+          console.log('Pagamento aprovado:', payment)
+        }
+      } catch (err) {
+        console.error('Erro ao obter detalhes do pagamento:', err)
+      }
+    }
 
     res.status(200).send('Notification received')
   }
@@ -132,6 +157,7 @@ class PaymentController {
         line_items: lineItems,
         payment_method_types: [req.body.method],
         mode: 'payment',
+        receipt_email: req.body.email,
         success_url: 'http://localhost:3000',
         cancel_url: 'http://localhost:3000',
       })
@@ -143,6 +169,76 @@ class PaymentController {
         .status(500)
         .json({ error: 'Failed to create Stripe checkout session' })
     }
+  }
+
+  async handleStripeNotification(req, res) {
+    const stripe = stripeLib(process.env.ACCESS_TOKEN_STRIPE)
+    const sig = req.headers['stripe-signature']
+    let event
+
+    try {
+      event = stripe.webhooks.constructEvent(
+        req.rawBody,
+        sig,
+        process.env.STRIPE_WEBHOOK_SECRET,
+      )
+
+      switch (event.type) {
+        case 'payment_intent.succeeded': {
+          const paymentIntentSucceeded = event.data.object
+          await savePayment(paymentIntentSucceeded)
+          console.log('Payment intent succeeded:', paymentIntentSucceeded)
+          break
+        }
+
+        case 'payment_intent.payment_failed': {
+          const paymentIntentFailed = event.data.object
+          await sendFailureEmail(paymentIntentFailed)
+          console.log('Payment intent failed:', paymentIntentFailed)
+          break
+        }
+
+        default:
+          console.log(`Unhandled event type ${event.type}`)
+      }
+    } catch (err) {
+      console.error('Erro ao processar webhook do Stripe:', err)
+      return res.status(400).send(`Webhook Error: ${err.message}`)
+    }
+
+    res.status(200).send('Notification received')
+  }
+}
+
+async function savePayment(paymentData) {
+  try {
+    console.log('Pagamento registrado com sucesso!')
+  } catch (err) {
+    console.error('Erro ao registrar pagamento:', err)
+  }
+}
+
+async function sendFailureEmail(paymentData) {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    })
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: paymentData.receipt_email, // Certifique-se de que o email está disponível no paymentData
+      subject: 'Maris Boutiks — Erro+',
+      text: `Olá, houve um erro ao processar seu pagamento. Por favor, tente novamente.`,
+    }
+
+    await transporter.sendMail(mailOptions)
+    console.log('E-mail de falha de pagamento enviado com sucesso!')
+  } catch (err) {
+    console.error('Erro ao enviar e-mail de falha de pagamento:', err)
   }
 }
 
