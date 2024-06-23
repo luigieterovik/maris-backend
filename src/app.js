@@ -6,7 +6,7 @@ import cors from 'cors'
 import './database'
 
 const corsOptions = {
-  origin: 'https://maris-frontend.vercel.app',
+  origin: 'http://localhost:3000',
   credentials: true,
 }
 
