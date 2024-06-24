@@ -159,6 +159,7 @@ class PaymentController {
         mode: 'payment',
         success_url: 'http://localhost:3000',
         cancel_url: 'http://localhost:3000',
+        customer_email: req.body.costumer_email,
       })
 
       return res.status(200).json({ id: session.id })
