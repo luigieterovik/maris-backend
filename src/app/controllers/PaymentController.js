@@ -189,13 +189,8 @@ class PaymentController {
         case 'payment_intent.succeeded': {
           const paymentIntentSucceeded = event.data.object
 
-          const session = event.data.object
-
-          // Access customer information
-          const customer = await stripe.customers.retrieve(session.customer)
-          const customerEmail = customer.email
-
-          console.log('customer_email:', customerEmail)
+          console.log(event.type)
+          console.log(event.data.object)
 
           savePayment()
 
