@@ -186,8 +186,22 @@ class PaymentController {
       switch (event.type) {
         case 'payment_intent.succeeded': {
           const paymentIntentSucceeded = event.data.object
-          console.log(paymentIntentSucceeded.costumer_email)
-          await savePayment(paymentIntentSucceeded)
+
+          // Obtenha o ID do cliente
+          const customerId = paymentIntentSucceeded.customer
+
+          if (customerId) {
+            // Busque o cliente usando o ID
+            const customer = await stripe.customers.retrieve(customerId)
+            const customerEmail = customer.email
+            console.log(customerEmail)
+
+            // Salve o pagamento com o email do cliente
+            await savePayment({ ...paymentIntentSucceeded, customerEmail })
+          } else {
+            console.log('No customer ID associated with payment intent')
+          }
+
           console.log('Payment intent succeeded:', paymentIntentSucceeded)
           break
         }
@@ -214,6 +228,7 @@ class PaymentController {
 async function savePayment(paymentData) {
   try {
     console.log('Pagamento registrado com sucesso!')
+    console.log(paymentData)
   } catch (err) {
     console.error('Erro ao registrar pagamento:', err)
   }
