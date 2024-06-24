@@ -157,6 +157,7 @@ class PaymentController {
         line_items: lineItems,
         payment_method_types: [req.body.method],
         mode: 'payment',
+        receipt_email: req.body.receipt_email,
         success_url: 'http://localhost:3000',
         cancel_url: 'http://localhost:3000',
       })
@@ -170,7 +171,7 @@ class PaymentController {
     }
   }
 
-  static async handleStripeNotification(req, res) {
+  async handleStripeNotification(req, res) {
     const stripe = stripeLib(process.env.ACCESS_TOKEN_STRIPE)
     const sig = req.headers['stripe-signature']
     let event
