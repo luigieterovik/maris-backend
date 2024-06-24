@@ -31,11 +31,6 @@ routes.post(
   '/webhook/mercadopago',
   PaymentController.handleMercadoPagoNotification,
 )
-routes.post(
-  '/webhook/stripe',
-  express.raw({ type: 'application/json' }),
-  PaymentController.handleStripeNotification,
-)
 
 routes.use(authMiddleware)
 
