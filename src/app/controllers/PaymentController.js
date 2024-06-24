@@ -177,7 +177,7 @@ class PaymentController {
 
     try {
       event = stripe.webhooks.constructEvent(
-        req.body, // Use req.body para o corpo bruto
+        req.body,
         sig,
         process.env.STRIPE_WEBHOOK_SECRET,
       )
@@ -229,7 +229,7 @@ async function sendFailureEmail(paymentData) {
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: paymentData.receipt_email, // Certifique-se de que o email está disponível no paymentData
+      to: paymentData.receipt_email,
       subject: 'Maris Boutiks — Erro+',
       text: `Olá, houve um erro ao processar seu pagamento. Por favor, tente novamente.`,
     }

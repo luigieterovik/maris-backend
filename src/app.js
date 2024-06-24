@@ -2,6 +2,7 @@ import express from 'express'
 import routes from './routes'
 import { resolve } from 'path'
 import cors from 'cors'
+import PaymentController from './app/controllers/PaymentController'
 
 import './database'
 
@@ -15,6 +16,12 @@ class App {
     this.app = express()
 
     this.app.use(cors(corsOptions))
+
+    this.app.post(
+      '/webhook/stripe',
+      express.raw({ type: 'application/json' }),
+      PaymentController.handleStripeNotification,
+    )
 
     this.middlewares()
     this.routes()
