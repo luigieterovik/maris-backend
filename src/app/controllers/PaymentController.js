@@ -154,7 +154,7 @@ class PaymentController {
       }))
 
       const session = await stripe.checkout.sessions.create({
-        line_items: lineItems,
+        lineItems,
         payment_method_types: [req.body.method],
         mode: 'payment',
         receipt_email: req.body.receipt_email,
