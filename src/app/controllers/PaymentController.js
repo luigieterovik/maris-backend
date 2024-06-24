@@ -187,7 +187,7 @@ class PaymentController {
         case 'payment_intent.succeeded': {
           const paymentIntentSucceeded = event.data.object
 
-          console.log(paymentIntentSucceeded.customer_email)
+          console.log(paymentIntentSucceeded.customer)
           savePayment(paymentIntentSucceeded)
 
           console.log('Payment intent succeeded:', paymentIntentSucceeded)
