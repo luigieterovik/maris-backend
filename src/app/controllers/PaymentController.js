@@ -188,6 +188,7 @@ class PaymentController {
           const paymentIntentSucceeded = event.data.object
 
           console.log(paymentIntentSucceeded.customer_email)
+          savePayment(paymentIntentSucceeded)
 
           console.log('Payment intent succeeded:', paymentIntentSucceeded)
           break
