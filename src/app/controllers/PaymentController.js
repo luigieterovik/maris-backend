@@ -159,7 +159,9 @@ class PaymentController {
         mode: 'payment',
         success_url: 'http://localhost:3000',
         cancel_url: 'http://localhost:3000',
-        customer: req.body.customer_email,
+        metadata: {
+          customer_id: req.body.customer_id,
+        },
       })
 
       return res.status(200).json({ id: session.id })
@@ -187,7 +189,7 @@ class PaymentController {
         case 'payment_intent.succeeded': {
           const paymentIntentSucceeded = event.data.object
 
-          console.log(paymentIntentSucceeded.customer)
+          console.log(paymentIntentSucceeded.metadata.customer_id)
           savePayment()
 
           console.log('Payment intent succeeded:', paymentIntentSucceeded)
