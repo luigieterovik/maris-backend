@@ -153,12 +153,19 @@ class PaymentController {
         quantity: product.quantity,
       }))
 
+      const customer = await stripe.customers.create({
+        metadata: {
+          userId: req.body.userId,
+        },
+      })
+
       const session = await stripe.checkout.sessions.create({
         line_items: lineItems,
         payment_method_types: [req.body.method],
         mode: 'payment',
         success_url: 'http://localhost:3000',
         cancel_url: 'http://localhost:3000',
+        customer: customer.id,
         customer_email: req.body.customer_email,
       })
 
@@ -189,9 +196,13 @@ class PaymentController {
         case 'payment_intent.succeeded': {
           const paymentIntentSucceeded = event.data.object
 
-          console.log(event.type)
-          console.log(event.data.object)
-
+          stripe.customers
+            .retrieve(paymentIntentSucceeded)
+            .then((costumer) => {
+              console.log(costumer)
+              console.log('data', paymentIntentSucceeded)
+            })
+            .catch((err) => console.log(err.message))
           savePayment()
 
           console.log('Payment intent succeeded:', paymentIntentSucceeded)
