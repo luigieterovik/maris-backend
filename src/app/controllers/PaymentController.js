@@ -159,7 +159,7 @@ class PaymentController {
         mode: 'payment',
         success_url: 'http://localhost:3000',
         cancel_url: 'http://localhost:3000',
-        receipt_email: req.body.costumer_email,
+        customer_email: req.body.costumer_email,
       })
 
       return res.status(200).json({ id: session.id })
@@ -186,6 +186,7 @@ class PaymentController {
       switch (event.type) {
         case 'payment_intent.succeeded': {
           const paymentIntentSucceeded = event.data.object
+          console.log(paymentIntentSucceeded.costumer_email)
           await savePayment(paymentIntentSucceeded)
           console.log('Payment intent succeeded:', paymentIntentSucceeded)
           break
