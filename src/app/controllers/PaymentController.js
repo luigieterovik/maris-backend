@@ -162,6 +162,8 @@ class PaymentController {
         customer_email: req.body.customer_email,
       })
 
+      console.log(session)
+
       return res.status(200).json({ id: session.id })
     } catch (error) {
       console.error('Error creating Stripe checkout session:', error)
@@ -186,15 +188,8 @@ class PaymentController {
       switch (event.type) {
         case 'payment_intent.succeeded': {
           const paymentIntentSucceeded = event.data.object
-          const sessionId = paymentIntentSucceeded.metadata.checkout_session
 
-          console.log('sessionId:', sessionId)
-
-          const session = await stripe.checkout.sessions.retrieve(sessionId)
-          const customerEmail = session.customer_details.email
-
-          console.log('customer_email:', customerEmail)
-
+          console.log(paymentIntentSucceeded.customer)
           savePayment()
 
           console.log('Payment intent succeeded:', paymentIntentSucceeded)
