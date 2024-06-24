@@ -186,7 +186,7 @@ class PaymentController {
       switch (event.type) {
         case 'payment_intent.succeeded': {
           const paymentIntentSucceeded = event.data.object
-          const sessionId = paymentIntentSucceeded.payment_intent
+          const sessionId = paymentIntentSucceeded.metadata.checkout_session
 
           console.log('sessionId:', sessionId)
 
