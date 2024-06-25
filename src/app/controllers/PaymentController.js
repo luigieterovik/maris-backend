@@ -195,10 +195,12 @@ class PaymentController {
         case 'payment_intent.succeeded': {
           const paymentIntentSucceeded = event.data.object
 
-          // O e-mail do cliente agora deve estar disponível corretamente
-          console.log(paymentIntentSucceeded.customer_email)
+          const customer = await stripe.customers.retrieve(
+            paymentIntentSucceeded.customer,
+          )
+          const customerEmail = customer.email
 
-          savePayment(paymentIntentSucceeded)
+          console.log('E-mail do cliente:', customerEmail)
 
           console.log('Payment intent succeeded:', paymentIntentSucceeded)
           break
