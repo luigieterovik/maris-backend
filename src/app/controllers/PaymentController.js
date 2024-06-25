@@ -137,15 +137,15 @@ class PaymentController {
 
   async stripe(req, res) {
     try {
-      const stripe = stripeLib(process.env.ACCESS_TOKEN_STRIPE);
-  
+      const stripe = stripeLib(process.env.ACCESS_TOKEN_STRIPE)
+
       // Criação do cliente no Stripe com o e-mail fornecido
       const customer = await stripe.customers.create({
         email: req.body.customer_email,
-      });
-  
-      const { products } = req.body;
-  
+      })
+
+      const { products } = req.body
+
       const lineItems = products.map((product) => ({
         price_data: {
           currency: 'brl',
@@ -156,8 +156,8 @@ class PaymentController {
           unit_amount: product.price * 100,
         },
         quantity: product.quantity,
-      }));
-  
+      }))
+
       // Criação da sessão de checkout, associando o cliente criado
       const session = await stripe.checkout.sessions.create({
         line_items: lineItems,
@@ -166,60 +166,62 @@ class PaymentController {
         success_url: 'http://localhost:3000',
         cancel_url: 'http://localhost:3000',
         customer: customer.id, // Associando o cliente à sessão
-      });
-  
-      console.log(session);
-  
-      return res.status(200).json({ id: session.id });
+      })
+
+      console.log(session)
+
+      return res.status(200).json({ id: session.id })
     } catch (error) {
-      console.error('Error creating Stripe checkout session:', error);
-      return res.status(500).json({ error: 'Failed to create Stripe checkout session' });
+      console.error('Error creating Stripe checkout session:', error)
+      return res
+        .status(500)
+        .json({ error: 'Failed to create Stripe checkout session' })
     }
   }
-  
+
   async handleStripeNotification(req, res) {
-    const stripe = stripeLib(process.env.ACCESS_TOKEN_STRIPE);
-    const sig = req.headers['stripe-signature'];
-    let event;
-  
+    const stripe = stripeLib(process.env.ACCESS_TOKEN_STRIPE)
+    const sig = req.headers['stripe-signature']
+    let event
+
     try {
       event = stripe.webhooks.constructEvent(
         req.body,
         sig,
         process.env.STRIPE_WEBHOOK_SECRET,
-      );
-  
+      )
+
       switch (event.type) {
         case 'payment_intent.succeeded': {
-          const paymentIntentSucceeded = event.data.object;
-  
+          const paymentIntentSucceeded = event.data.object
+
           // O e-mail do cliente agora deve estar disponível corretamente
-          console.log(paymentIntentSucceeded.customer_email);
+          console.log(paymentIntentSucceeded.customer_email)
 
           savePayment(paymentIntentSucceeded)
-  
-          console.log('Payment intent succeeded:', paymentIntentSucceeded);
-          break;
+
+          console.log('Payment intent succeeded:', paymentIntentSucceeded)
+          break
         }
-  
+
         case 'payment_intent.payment_failed': {
-          const paymentIntentFailed = event.data.object;
-          await sendFailureEmail(paymentIntentFailed);
-          console.log('Payment intent failed:', paymentIntentFailed);
-          break;
+          const paymentIntentFailed = event.data.object
+          await sendFailureEmail(paymentIntentFailed)
+          console.log('Payment intent failed:', paymentIntentFailed)
+          break
         }
-  
+
         default:
-          console.log(`Unhandled event type ${event.type}`);
+          console.log(`Unhandled event type ${event.type}`)
       }
     } catch (err) {
-      console.error('Erro ao processar webhook do Stripe:', err);
-      return res.status(400).send(`Webhook Error: ${err.message}`);
+      console.error('Erro ao processar webhook do Stripe:', err)
+      return res.status(400).send(`Webhook Error: ${err.message}`)
     }
-  
-    res.status(200).send('Notification received');
+
+    res.status(200).send('Notification received')
   }
-  
+}
 
 async function savePayment(paymentData) {
   try {
