@@ -141,7 +141,7 @@ class PaymentController {
 
       // Criação do cliente no Stripe com o e-mail fornecido
       const customer = await stripe.customers.create({
-        email: req.body.customer_email,
+        email: 'kasaiidaisuke@gmail.com',
       })
 
       const { products } = req.body
@@ -158,17 +158,14 @@ class PaymentController {
         quantity: product.quantity,
       }))
 
-      // Criação da sessão de checkout, associando o cliente criado
       const session = await stripe.checkout.sessions.create({
         line_items: lineItems,
         payment_method_types: [req.body.method],
         mode: 'payment',
         success_url: 'http://localhost:3000',
         cancel_url: 'http://localhost:3000',
-        customer: customer.id, // Associando o cliente à sessão
+        customer: customer.id,
       })
-
-      console.log(session)
 
       return res.status(200).json({ id: session.id })
     } catch (error) {
@@ -200,9 +197,10 @@ class PaymentController {
           )
           const customerEmail = customer.email
 
-          console.log('E-mail do cliente:', customerEmail)
+          console.log(customerEmail)
 
-          console.log('Payment intent succeeded:', paymentIntentSucceeded)
+          await savePayment(customerEmail)
+
           break
         }
 
@@ -225,10 +223,9 @@ class PaymentController {
   }
 }
 
-async function savePayment(paymentData) {
+async function savePayment(userEmail) {
   try {
     console.log('Pagamento registrado com sucesso!')
-    console.log(paymentData)
   } catch (err) {
     console.error('Erro ao registrar pagamento:', err)
   }
