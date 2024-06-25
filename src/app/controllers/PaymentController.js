@@ -196,7 +196,7 @@ class PaymentController {
           // O e-mail do cliente agora deve estar disponível corretamente
           console.log(paymentIntentSucceeded.customer_email);
 
-          savePayment()
+          savePayment(paymentIntentSucceeded)
   
           console.log('Payment intent succeeded:', paymentIntentSucceeded);
           break;
