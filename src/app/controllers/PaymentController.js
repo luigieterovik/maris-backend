@@ -160,7 +160,10 @@ class PaymentController {
         success_url: 'http://localhost:3000',
         cancel_url: 'http://localhost:3000',
         customer_email: req.body.customer_email,
-        receipt_email: req.body.receipt_email,
+        metadata: {
+          order_id: '6735',
+          customer_id: '1234',
+        },
       })
 
       console.log(session)
