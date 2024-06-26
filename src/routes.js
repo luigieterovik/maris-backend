@@ -34,6 +34,8 @@ routes.post(
 
 routes.use(authMiddleware)
 
+routes.post('/validate-token', SessionController.validateToken)
+
 routes.post('/catalog', upload.single('file'), ProductController.store)
 routes.put('/catalog/:id', upload.single('file'), ProductController.update)
 routes.get('/catalog', ProductController.index)

@@ -43,6 +43,22 @@ class SessionController {
       }),
     })
   }
+
+  async validateToken(req, res) {
+    const { token } = req.body
+
+    if (!token) {
+      return res.status(400).json({ error: 'Token is required' })
+    }
+
+    jwt.verify(token, authConfig.secret, (err, decoded) => {
+      if (err) {
+        return res.status(401).json({ error: 'Invalid token' })
+      }
+
+      return res.status(200).json({ valid: true })
+    })
+  }
 }
 
 export default new SessionController()

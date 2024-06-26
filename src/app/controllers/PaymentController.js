@@ -141,7 +141,7 @@ class PaymentController {
 
       // Criação do cliente no Stripe com o e-mail fornecido
       const customer = await stripe.customers.create({
-        email: 'kasaiidaisuke@gmail.com',
+        email: req.body.customer_email,
       })
 
       const { products } = req.body
@@ -196,8 +196,6 @@ class PaymentController {
             paymentIntentSucceeded.customer,
           )
           const customerEmail = customer.email
-
-          console.log(customerEmail)
 
           await savePayment(customerEmail)
 
