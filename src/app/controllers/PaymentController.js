@@ -75,7 +75,7 @@ class PaymentController {
         headers: {
           accept: 'application/json',
           'content-type': 'application/json',
-          Authorization: 'Bearer ' + process.env.ACCESS_TOKEN_MERCADOPAGO,
+          Authorization: `Bearer ${process.env.ACCESS_TOKEN_MERCADOPAGO}`,
           'X-Idempotency-Key': v4(),
         },
         body: JSON.stringify({
@@ -86,7 +86,7 @@ class PaymentController {
             email: req.body.payer.email,
             identification: {
               type: 'CPF',
-              number: '49512657880',
+              number: req.body.payer.identification.number,
             },
           },
         }),
@@ -100,7 +100,7 @@ class PaymentController {
     } catch (err) {
       return res
         .status(500)
-        .json([{ error: 'Failed to create payment' }, { err }])
+        .json({ error: 'Failed to create payment', details: err })
     }
   }
 
