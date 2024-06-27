@@ -25,6 +25,8 @@ routes.post('/sessions', SessionController.store)
 routes.post('/recover', RecoverController.store)
 routes.post('/reset', UserController.updatePassword)
 
+routes.post('/validate-token', SessionController.validateToken)
+
 routes.use(authMiddleware)
 
 routes.post('/pay', PaymentController.mercadopago)
@@ -34,8 +36,6 @@ routes.post(
   '/webhook/mercadopago',
   PaymentController.handleMercadoPagoNotification,
 )
-
-routes.post('/validate-token', SessionController.validateToken)
 
 routes.post('/catalog', upload.single('file'), ProductController.store)
 routes.put('/catalog/:id', upload.single('file'), ProductController.update)
