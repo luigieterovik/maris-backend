@@ -113,7 +113,6 @@ class PaymentController {
     ) {
       const paymentId = notification.data.id
 
-      // Obter os detalhes do pagamento usando a API do Mercado Pago
       const client = new MercadoPagoConfig({
         accessToken: process.env.ACCESS_TOKEN_MERCADOPAGO,
       })
@@ -122,10 +121,12 @@ class PaymentController {
         const payment = await client.get(`/v1/payments/${paymentId}`)
 
         if (payment.status === 'approved') {
-          // Registrar os dados no banco de dados
-          // Exemplo: savePayment(payment);
-
+          // Aqui você pode processar o pagamento aprovado, salvar no banco de dados, etc.
           console.log('Pagamento aprovado:', payment)
+
+          // Enviar email ao usuário
+          const userEmail = payment.payer.email
+          console.log(userEmail)
         }
       } catch (err) {
         console.error('Erro ao obter detalhes do pagamento:', err)

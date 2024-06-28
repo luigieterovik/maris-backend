@@ -27,15 +27,16 @@ routes.post('/reset', UserController.updatePassword)
 
 routes.post('/validate-token', SessionController.validateToken)
 
+routes.post(
+  '/webhook/mercadopago',
+  PaymentController.handleMercadoPagoNotification,
+)
+
 routes.use(authMiddleware)
 
 routes.post('/pay', PaymentController.mercadopago)
 routes.post('/payStripe', PaymentController.stripe)
 routes.post('/pix', PaymentController.pix)
-routes.post(
-  '/webhook/mercadopago',
-  PaymentController.handleMercadoPagoNotification,
-)
 
 routes.post('/catalog', upload.single('file'), ProductController.store)
 routes.put('/catalog/:id', upload.single('file'), ProductController.update)
