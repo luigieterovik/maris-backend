@@ -1,5 +1,7 @@
 {
-    "execMap": {
-        "js": "node -r sucrase/register"
-    }
+  "execMap": {
+    "js": "node -r sucrase/register"
+  },
+  "watch": ["src"],
+  "ignore": ["node_modules", "logs"]
 }
