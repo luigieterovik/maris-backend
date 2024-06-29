@@ -2,6 +2,7 @@ import * as Yup from 'yup'
 import { MercadoPagoConfig, Preference } from 'mercadopago'
 import dotenv from 'dotenv'
 import stripeLib from 'stripe'
+import axios from 'axios'
 import request from 'request'
 import nodemailer from 'nodemailer'
 
@@ -106,7 +107,6 @@ class PaymentController {
 
   async handleMercadoPagoNotification(req, res) {
     const notification = req.body
-
     console.log(notification)
 
     if (
@@ -115,12 +115,17 @@ class PaymentController {
     ) {
       const paymentId = notification.data.id
 
-      const client = new MercadoPagoConfig({
-        accessToken: process.env.ACCESS_TOKEN_MERCADOPAGO,
-      })
-
       try {
-        const payment = await client.get(`/v1/payments/${paymentId}`)
+        const paymentResponse = await axios.get(
+          `https://api.mercadopago.com/v1/payments/${paymentId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${process.env.ACCESS_TOKEN_MERCADOPAGO}`,
+            },
+          },
+        )
+
+        const payment = paymentResponse.data
 
         if (payment.status === 'approved') {
           // Aqui você pode processar o pagamento aprovado, salvar no banco de dados, etc.
@@ -128,10 +133,14 @@ class PaymentController {
 
           // Enviar email ao usuário
           const userEmail = payment.payer.email
-          console.log(userEmail)
+          console.log('Email do usuário:', userEmail)
+          // Implementar lógica de envio de email aqui
         }
       } catch (err) {
-        console.error('Erro ao obter detalhes do pagamento:', err)
+        console.error(
+          'Erro ao obter detalhes do pagamento:',
+          err.response ? err.response.data : err.message,
+        )
       }
     }
 
