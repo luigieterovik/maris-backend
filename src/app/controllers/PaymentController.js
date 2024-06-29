@@ -95,7 +95,6 @@ class PaymentController {
 
       request(options, function (error, response, body) {
         if (error) throw new Error(error)
-        console.log(JSON.parse(body))
         return res.status(200).json(JSON.parse(body))
       })
     } catch (err) {
