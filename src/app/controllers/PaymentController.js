@@ -1,11 +1,13 @@
 import * as Yup from 'yup'
 import { MercadoPagoConfig, Preference } from 'mercadopago'
+import mercadopago from 'mercadopago'
 import dotenv from 'dotenv'
 import stripeLib from 'stripe'
 import axios from 'axios'
 import nodemailer from 'nodemailer'
 
 import { v4 } from 'uuid'
+const mercadopago = require('mercadopago')
 
 dotenv.config()
 
@@ -68,6 +70,10 @@ class PaymentController {
   }
 
   async pix(req, res) {
+    mercadopago.configure({
+      access_token: process.env.ACCESS_TOKEN_MERCADOPAGO,
+    })
+
     const {
       transaction_amount,
       title,
@@ -75,33 +81,38 @@ class PaymentController {
       external_reference,
       statement_descriptor,
     } = req.body
-    console.log('Dados recebidos do frontend:', req.body)
 
     try {
-      const options = {
-        method: 'POST',
-        url: 'https://api.mercadopago.com/v1/payments',
-        headers: {
-          accept: 'application/json',
-          'content-type': 'application/json',
-          Authorization: `Bearer ${process.env.ACCESS_TOKEN_MERCADOPAGO}`,
-          'X-Idempotency-Key': v4(),
+      const preferenceData = {
+        items: [
+          {
+            title: title,
+            quantity: 1,
+            unit_price: transaction_amount,
+            currency_id: 'BRL',
+          },
+        ],
+        payer,
+        external_reference,
+        statement_descriptor,
+        back_urls: {
+          success: 'http://localhost:3000',
+          failure: 'http://localhost:3000',
+          pending: 'http://localhost:3000',
         },
-        data: {
-          transaction_amount,
-          description: title,
-          payment_method_id: 'pix',
-          payer,
-          external_reference,
-          statement_descriptor,
+        auto_return: 'approved',
+        payment_methods: {
+          excluded_payment_methods: [{ id: 'credit_card' }],
+          excluded_payment_types: [{ id: 'credit_card' }],
         },
+        transaction_amount,
       }
 
-      const response = await axios(options)
+      const preference = await mercadopago.preferences.create(preferenceData)
 
-      console.log('Resposta do Mercado Pago:', response.data)
+      console.log('Resposta do Mercado Pago:', preference.body)
 
-      return res.status(200).json(response.data)
+      return res.status(200).json(preference.body)
     } catch (err) {
       console.log('Erro:', err.response ? err.response.data : err.message)
       return res.status(500).json({
