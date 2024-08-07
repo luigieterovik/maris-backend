@@ -72,7 +72,6 @@ class PaymentController {
       transaction_amount,
       title,
       payer,
-      items,
       external_reference,
       statement_descriptor,
     } = req.body
@@ -95,7 +94,16 @@ class PaymentController {
           payer,
           external_reference,
           statement_descriptor,
-          items,
+          items: [
+            {
+              id: '12345',
+              title: 'Produto Teste',
+              description: 'Descrição do produto teste',
+              quantity: 1,
+              unit_price: 1.0,
+              category_id: 'fashion',
+            },
+          ],
         },
       }
 
