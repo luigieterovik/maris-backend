@@ -71,6 +71,15 @@ class PaymentController {
   }
 
   async pix(req, res) {
+    const {
+      transaction_amount,
+      title,
+      payer,
+      external_reference,
+      statement_descriptor,
+    } = req.body
+    console.log('Dados recebidos do frontend:', req.body)
+
     try {
       const options = {
         method: 'POST',
@@ -81,28 +90,27 @@ class PaymentController {
           Authorization: `Bearer ${process.env.ACCESS_TOKEN_MERCADOPAGO}`,
           'X-Idempotency-Key': v4(),
         },
-        body: JSON.stringify({
-          transaction_amount: req.body.transaction_amount,
-          description: req.body.title,
+        data: {
+          transaction_amount,
+          description: title,
           payment_method_id: 'pix',
-          payer: {
-            email: req.body.payer.email,
-            identification: {
-              type: 'CPF',
-              number: req.body.payer.identification.number,
-            },
-          },
-        }),
+          payer,
+          external_reference,
+          statement_descriptor,
+        },
       }
 
-      request(options, function (error, response, body) {
-        if (error) throw new Error(error)
-        return res.status(200).json(JSON.parse(body))
-      })
+      const response = await axios(options)
+
+      console.log('Resposta do Mercado Pago:', response.data) // Log da resposta do Mercado Pago
+
+      return res.status(200).json(response.data)
     } catch (err) {
-      return res
-        .status(500)
-        .json({ error: 'Failed to create payment', details: err })
+      console.log('Erro:', err.response ? err.response.data : err.message) // Log do erro detalhado
+      return res.status(500).json({
+        error: 'Failed to create payment',
+        details: err.response ? err.response.data : err.message,
+      })
     }
   }
 
