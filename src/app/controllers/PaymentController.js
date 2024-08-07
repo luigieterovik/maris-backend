@@ -1,16 +1,19 @@
 import * as Yup from 'yup'
 import { MercadoPagoConfig, Preference } from 'mercadopago'
-import mercadopago from 'mercadopago'
 import dotenv from 'dotenv'
 import stripeLib from 'stripe'
 import axios from 'axios'
 import nodemailer from 'nodemailer'
 
 import { v4 } from 'uuid'
+
 const mercadopago = require('mercadopago')
 
 dotenv.config()
 
+mercadopago.configure({
+  access_token: process.env.ACCESS_TOKEN_MERCADOPAGO,
+})
 class PaymentController {
   async mercadopago(req, res) {
     const schema = Yup.object().shape({
@@ -70,10 +73,6 @@ class PaymentController {
   }
 
   async pix(req, res) {
-    mercadopago.configure({
-      access_token: process.env.ACCESS_TOKEN_MERCADOPAGO,
-    })
-
     const {
       transaction_amount,
       title,
@@ -86,7 +85,7 @@ class PaymentController {
       const preferenceData = {
         items: [
           {
-            title: title,
+            title,
             quantity: 1,
             unit_price: transaction_amount,
             currency_id: 'BRL',
