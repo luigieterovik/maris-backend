@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import stripeLib from 'stripe'
 import axios from 'axios'
 import nodemailer from 'nodemailer'
+import request from 'request'
 
 import { v4 } from 'uuid'
 
@@ -70,51 +71,38 @@ class PaymentController {
   }
 
   async pix(req, res) {
-    const {
-      transaction_amount,
-      title,
-      payer,
-      external_reference,
-      statement_descriptor,
-    } = req.body
-
     try {
-      const preferenceData = {
-        items: [
-          {
-            title,
-            quantity: 1,
-            unit_price: transaction_amount,
-            currency_id: 'BRL',
+      const options = {
+        method: 'POST',
+        url: 'https://api.mercadopago.com/v1/payments',
+        headers: {
+          accept: 'application/json',
+          'content-type': 'application/json',
+          Authorization: `Bearer ${process.env.ACCESS_TOKEN_MERCADOPAGO}`,
+          'X-Idempotency-Key': v4(),
+        },
+        body: JSON.stringify({
+          transaction_amount: req.body.transaction_amount,
+          description: req.body.title,
+          payment_method_id: 'pix',
+          payer: {
+            email: req.body.payer.email,
+            identification: {
+              type: 'CPF',
+              number: req.body.payer.identification.number,
+            },
           },
-        ],
-        payer,
-        external_reference,
-        statement_descriptor,
-        back_urls: {
-          success: 'http://localhost:3000',
-          failure: 'http://localhost:3000',
-          pending: 'http://localhost:3000',
-        },
-        auto_return: 'approved',
-        payment_methods: {
-          excluded_payment_methods: [{ id: 'credit_card' }],
-          excluded_payment_types: [{ id: 'credit_card' }],
-        },
-        transaction_amount,
+        }),
       }
 
-      const preference = await mercadopago.preferences.create(preferenceData)
-
-      console.log('Resposta do Mercado Pago:', preference.body)
-
-      return res.status(200).json(preference.body)
-    } catch (err) {
-      console.log('Erro:', err.response ? err.response.data : err.message)
-      return res.status(500).json({
-        error: 'Failed to create payment',
-        details: err.response ? err.response.data : err.message,
+      request(options, function (error, response, body) {
+        if (error) throw new Error(error)
+        return res.status(200).json(JSON.parse(body))
       })
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ error: 'Failed to create payment', details: err })
     }
   }
 
