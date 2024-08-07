@@ -11,9 +11,6 @@ const mercadopago = require('mercadopago')
 
 dotenv.config()
 
-mercadopago.configure({
-  access_token: process.env.ACCESS_TOKEN_MERCADOPAGO,
-})
 class PaymentController {
   async mercadopago(req, res) {
     const schema = Yup.object().shape({
