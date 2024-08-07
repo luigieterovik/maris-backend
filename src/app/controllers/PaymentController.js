@@ -1,9 +1,8 @@
 import * as Yup from 'yup'
-import { MercadoPagoConfig, Preference, Payment } from 'mercadopago'
+import { MercadoPagoConfig, Preference } from 'mercadopago'
 import dotenv from 'dotenv'
 import stripeLib from 'stripe'
 import axios from 'axios'
-import request from 'request'
 import nodemailer from 'nodemailer'
 
 import { v4 } from 'uuid'
@@ -79,13 +78,6 @@ class PaymentController {
     } = req.body
     console.log('Dados recebidos do frontend:', req.body)
 
-    const client = new MercadoPagoConfig({
-      accessToken: process.env.ACCESS_TOKEN_MERCADOPAGO,
-      options: { timeout: 5000, idempotencyKey: v4() },
-    })
-
-    const payment = new Payment(client)
-
     try {
       const options = {
         method: 'POST',
@@ -107,20 +99,13 @@ class PaymentController {
         },
       }
 
-      const requestOptions = {
-        idempotencyKey: v4(),
-      }
+      const response = await axios(options)
 
-      const response = payment
-        .create({ options, requestOptions })
-        .then(console.log)
-        .catch(console.log)
-
-      console.log('Resposta do Mercado Pago:', response) // Log da resposta do Mercado Pago
+      console.log('Resposta do Mercado Pago:', response.data)
 
       return res.status(200).json(response.data)
     } catch (err) {
-      console.log('Erro:', err.response ? err.response.data : err.message) // Log do erro detalhado
+      console.log('Erro:', err.response ? err.response.data : err.message)
       return res.status(500).json({
         error: 'Failed to create payment',
         details: err.response ? err.response.data : err.message,
