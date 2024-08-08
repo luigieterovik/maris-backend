@@ -70,7 +70,7 @@ class PaymentController {
 
   async pix(req, res) {
     const client = new MercadoPagoConfig({
-      accessToken: 'access_token',
+      accessToken: process.env.ACCESS_TOKEN_MERCADOPAGO,
       options: { timeout: 5000, idempotencyKey: 'abc' },
     })
 
