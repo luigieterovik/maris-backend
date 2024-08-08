@@ -10,7 +10,9 @@ import { v4 } from 'uuid'
 
 dotenv.config()
 
-mercadopago.configurations.setAccessToken(process.env.ACCESS_TOKEN_MERCADOPAGO)
+mercadopago.configure({
+  access_token: process.env.ACCESS_TOKEN_MERCADOPAGO,
+})
 
 class PaymentController {
   async mercadopago(req, res) {
