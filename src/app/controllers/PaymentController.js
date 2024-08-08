@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import { MercadoPagoConfig, Preference } from 'mercadopago'
+import mercadopago, { MercadoPagoConfig, Preference } from 'mercadopago'
 import dotenv from 'dotenv'
 import stripeLib from 'stripe'
 import axios from 'axios'
@@ -7,8 +7,6 @@ import nodemailer from 'nodemailer'
 import request from 'request'
 
 import { v4 } from 'uuid'
-
-const mercadopago = require('mercadopago')
 
 dotenv.config()
 
