@@ -118,7 +118,7 @@ class PaymentController {
 
       console.log('Resposta do Mercado Pago:', response) // Log da resposta do Mercado Pago
 
-      return res.status(200).json(response)
+      return res.status(200).json(response.init_point)
     } catch (err) {
       console.log('Erro:', err.response ? err.response.data : err.message) // Log do erro detalhado
       return res.status(500).json({
