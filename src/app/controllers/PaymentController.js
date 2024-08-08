@@ -10,6 +10,8 @@ import { v4 } from 'uuid'
 
 dotenv.config()
 
+mercadopago.configurations.setAccessToken(process.env.ACCESS_TOKEN_MERCADOPAGO)
+
 class PaymentController {
   async mercadopago(req, res) {
     const schema = Yup.object().shape({
@@ -69,9 +71,6 @@ class PaymentController {
   }
 
   async pix(req, res) {
-    mercadopago.configurations.setAccessToken(
-      process.env.ACCESS_TOKEN_MERCADOPAGO,
-    )
     const {
       transaction_amount,
       title,
