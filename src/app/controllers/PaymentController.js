@@ -106,9 +106,9 @@ class PaymentController {
         .then(console.log)
         .catch(console.log)
 
-      console.log('Resposta do Mercado Pago:', response.body) // Log da resposta do Mercado Pago
+      console.log('Resposta do Mercado Pago:', response) // Log da resposta do Mercado Pago
 
-      return res.status(200).json(response.body)
+      return res.status(200).json(response)
     } catch (err) {
       console.log('Erro:', err.response ? err.response.data : err.message) // Log do erro detalhado
       return res.status(500).json({
