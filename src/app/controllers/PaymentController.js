@@ -80,6 +80,7 @@ class PaymentController {
       transaction_amount,
       title,
       payer,
+      items,
       external_reference,
       statement_descriptor,
     } = req.body
@@ -93,6 +94,7 @@ class PaymentController {
         description: title,
         payment_method_id: 'pix',
         payer,
+        items,
         external_reference,
         statement_descriptor,
       }
