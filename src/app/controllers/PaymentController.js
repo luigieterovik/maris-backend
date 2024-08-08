@@ -74,7 +74,7 @@ class PaymentController {
       options: { timeout: 5000, idempotencyKey: 'abc' },
     })
 
-    const payment = new Payment(client)
+    const preference = new Preference(client)
 
     const {
       transaction_amount,
@@ -103,7 +103,7 @@ class PaymentController {
         idempotencyKey: v4(),
       }
 
-      const response = await payment.create({ body, requestOptions })
+      const response = await preference.create({ body, requestOptions })
 
       console.log('Resposta do Mercado Pago:', response) // Log da resposta do Mercado Pago
 
