@@ -94,6 +94,18 @@ class PaymentController {
         description: title,
         payment_method_id: 'pix',
         payer,
+        payment_methods: {
+          excluded_payment_methods: [
+            { id: 'credit_card' },
+            { id: 'debit_card' },
+          ], // Exclua outros métodos de pagamento se necessário
+        },
+        back_urls: {
+          success: 'http://localhost:3000',
+          failure: 'http://localhost:3000',
+          pending: 'http://localhost:3000',
+        },
+        auto_return: 'approved',
         items,
         external_reference,
         statement_descriptor,
