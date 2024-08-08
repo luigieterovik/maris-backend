@@ -2157,10 +2157,10 @@ memoizee@^0.4.15:
     next-tick "^1.1.0"
     timers-ext "^0.1.7"
 
-mercadopago@^2.0.9:
-  version "2.0.9"
-  resolved "https://registry.yarnpkg.com/mercadopago/-/mercadopago-2.0.9.tgz#6f1ea4bd00c206ae5c6aa723b2d422519081c268"
-  integrity sha512-Dee6JXeJbf9xCYlO/Wr+5koY1LP8mN+YeY7hX8mtZiYdVtITE/Qfxf+nz+BVMgG6RTnYKrcNUbERmqMy6nSpxg==
+mercadopago@^2.0.11:
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/mercadopago/-/mercadopago-2.0.11.tgz#0f475adab3d0e4041153227d731d177a7cd7c04c"
+  integrity sha512-jK/cqjNqBwSrxl1WrQ9UDwoy3BcFuHG3CKKa5EpQhqQyAbfIf2QjIs01Gw65v+94tL4brTrFgb1Ad8PSSCVPRQ==
   dependencies:
     node-fetch "^2.6.12"
     uuid "^9.0.0"

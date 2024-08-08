@@ -72,7 +72,6 @@ class PaymentController {
     mercadopago.configurations.setAccessToken(
       process.env.ACCESS_TOKEN_MERCADOPAGO,
     )
-
     const {
       transaction_amount,
       title,
