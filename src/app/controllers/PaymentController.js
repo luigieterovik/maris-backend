@@ -71,6 +71,10 @@ class PaymentController {
   }
 
   async pix(req, res) {
+    mercadopago.configurations.setAccessToken(
+      process.env.ACCESS_TOKEN_MERCADOPAGO,
+    )
+
     const {
       transaction_amount,
       title,
@@ -78,33 +82,25 @@ class PaymentController {
       external_reference,
       statement_descriptor,
     } = req.body
+
     console.log('Dados recebidos do frontend:', req.body)
 
     try {
-      const options = {
-        method: 'POST',
-        url: 'https://api.mercadopago.com/v1/payments',
-        headers: {
-          accept: 'application/json',
-          'content-type': 'application/json',
-          Authorization: `Bearer ${process.env.ACCESS_TOKEN_MERCADOPAGO}`,
-          'X-Idempotency-Key': v4(),
-        },
-        data: {
-          transaction_amount,
-          description: title,
-          payment_method_id: 'pix',
-          payer,
-          external_reference,
-          statement_descriptor,
-        },
+      // Criação do pagamento usando a SDK do Mercado Pago
+      const payment_data = {
+        transaction_amount,
+        description: title,
+        payment_method_id: 'pix',
+        payer,
+        external_reference,
+        statement_descriptor,
       }
 
-      const response = await axios(options)
+      const response = await mercadopago.payment.create(payment_data)
 
-      console.log('Resposta do Mercado Pago:', response.data) // Log da resposta do Mercado Pago
+      console.log('Resposta do Mercado Pago:', response.body) // Log da resposta do Mercado Pago
 
-      return res.status(200).json(response.data)
+      return res.status(200).json(response.body)
     } catch (err) {
       console.log('Erro:', err.response ? err.response.data : err.message) // Log do erro detalhado
       return res.status(500).json({
