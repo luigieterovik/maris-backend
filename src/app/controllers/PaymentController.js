@@ -71,7 +71,6 @@ class PaymentController {
   async pix(req, res) {
     const client = new MercadoPagoConfig({
       accessToken: process.env.ACCESS_TOKEN_MERCADOPAGO,
-      options: { timeout: 5000, idempotencyKey: 'abc' },
     })
 
     const preference = new Preference(client)
