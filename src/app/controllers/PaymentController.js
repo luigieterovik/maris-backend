@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import mercadopago, { MercadoPagoConfig, Preference } from 'mercadopago'
+import { MercadoPagoConfig, Preference } from 'mercadopago'
 import dotenv from 'dotenv'
 import stripeLib from 'stripe'
 import axios from 'axios'
@@ -10,7 +10,7 @@ import { v4 } from 'uuid'
 
 dotenv.config()
 
-mercadopago.configure({
+MercadoPagoConfig({
   access_token: process.env.ACCESS_TOKEN_MERCADOPAGO,
 })
 
