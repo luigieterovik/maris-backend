@@ -103,8 +103,8 @@ class PaymentController {
 
       const response = await payment
         .create({ body, requestOptions })
-        .then(console.log)
-        .catch(console.log)
+        .then(console.log('Deu certo'))
+        .catch(console.log('Deu bosta'))
 
       console.log('Resposta do Mercado Pago:', response) // Log da resposta do Mercado Pago
 
