@@ -101,7 +101,7 @@ class PaymentController {
         idempotencyKey: v4(),
       }
 
-      const response = payment
+      const response = await payment
         .create({ body, requestOptions })
         .then(console.log)
         .catch(console.log)
