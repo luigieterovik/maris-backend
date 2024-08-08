@@ -131,6 +131,8 @@ class PaymentController {
   async handleMercadoPagoNotification(req, res) {
     const notification = req.body
 
+    console.log(notification)
+
     if (
       notification.action === 'payment.created' ||
       notification.action === 'payment.updated'
