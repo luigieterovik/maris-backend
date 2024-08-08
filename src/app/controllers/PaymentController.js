@@ -101,10 +101,7 @@ class PaymentController {
         idempotencyKey: v4(),
       }
 
-      const response = await payment
-        .create({ body, requestOptions })
-        .then()
-        .catch()
+      const response = await payment.create({ body, requestOptions })
 
       console.log('Resposta do Mercado Pago:', response) // Log da resposta do Mercado Pago
 
