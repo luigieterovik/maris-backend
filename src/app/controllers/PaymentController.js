@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import { MercadoPagoConfig, Preference } from 'mercadopago'
+import { MercadoPagoConfig, Preference, Payment } from 'mercadopago'
 import dotenv from 'dotenv'
 import stripeLib from 'stripe'
 import axios from 'axios'
@@ -9,10 +9,6 @@ import request from 'request'
 import { v4 } from 'uuid'
 
 dotenv.config()
-
-MercadoPagoConfig({
-  access_token: process.env.ACCESS_TOKEN_MERCADOPAGO,
-})
 
 class PaymentController {
   async mercadopago(req, res) {
@@ -73,6 +69,13 @@ class PaymentController {
   }
 
   async pix(req, res) {
+    const client = new MercadoPagoConfig({
+      accessToken: 'access_token',
+      options: { timeout: 5000, idempotencyKey: 'abc' },
+    })
+
+    const payment = new Payment(client)
+
     const {
       transaction_amount,
       title,
@@ -85,7 +88,7 @@ class PaymentController {
 
     try {
       // Criação do pagamento usando a SDK do Mercado Pago
-      const payment_data = {
+      const body = {
         transaction_amount,
         description: title,
         payment_method_id: 'pix',
@@ -94,7 +97,14 @@ class PaymentController {
         statement_descriptor,
       }
 
-      const response = await mercadopago.payment.create(payment_data)
+      const requestOptions = {
+        idempotencyKey: v4(),
+      }
+
+      const response = payment
+        .create({ body, requestOptions })
+        .then(console.log)
+        .catch(console.log)
 
       console.log('Resposta do Mercado Pago:', response.body) // Log da resposta do Mercado Pago
 
