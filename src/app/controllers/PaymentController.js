@@ -41,9 +41,9 @@ class PaymentController {
           },
         ],
         back_urls: {
-          success: 'http://localhost:3000',
-          failure: 'http://localhost:3000',
-          pending: 'http://localhost:3000',
+          success: 'https://maris-frontend.vercel.app',
+          failure: 'https://maris-frontend.vercel.app',
+          pending: 'https://maris-frontend.vercel.app',
         },
         auto_return: 'approved',
       }
@@ -100,9 +100,9 @@ class PaymentController {
           ], // Exclua outros métodos de pagamento se necessário
         },
         back_urls: {
-          success: 'http://localhost:3000',
-          failure: 'http://localhost:3000',
-          pending: 'http://localhost:3000',
+          success: 'https://maris-frontend.vercel.app',
+          failure: 'https://maris-frontend.vercel.app',
+          pending: 'https://maris-frontend.vercel.app',
         },
         auto_return: 'approved',
         items,
@@ -196,8 +196,8 @@ class PaymentController {
         line_items: lineItems,
         payment_method_types: [req.body.method],
         mode: 'payment',
-        success_url: 'http://localhost:3000',
-        cancel_url: 'http://localhost:3000',
+        success_url: 'https://maris-frontend.vercel.app',
+        cancel_url: 'https://maris-frontend.vercel.app',
         customer: customer.id,
       })
 
