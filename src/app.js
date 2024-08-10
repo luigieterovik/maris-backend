@@ -2,7 +2,7 @@ import express from 'express'
 import routes from './routes'
 import { resolve } from 'path'
 import cors from 'cors'
-import PaymentController from './app/controllers/PaymentController'
+import NotificationController from './app/controllers/NotificationController'
 
 import './database'
 
@@ -22,7 +22,7 @@ class App {
     this.app.post(
       '/webhook/stripe',
       express.raw({ type: 'application/json' }),
-      PaymentController.handleStripeNotification,
+      NotificationController.handleStripeNotification,
     )
 
     this.middlewares()
