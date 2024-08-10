@@ -11,6 +11,7 @@ import CategoryController from './app/controllers/CategoryController'
 import OrderController from './app/controllers/OrderController'
 import RecoverController from './app/controllers/RecoverController'
 import PaymentController from './app/controllers/PaymentController'
+import NotificationController from './app/controllers/NotificationController'
 
 const upload = multer(multerConfig)
 
@@ -29,7 +30,7 @@ routes.post('/validate-token', SessionController.validateToken)
 
 routes.post(
   '/webhook/mercadopago',
-  PaymentController.handleMercadoPagoNotification,
+  NotificationController.handleMercadoPagoNotification,
 )
 
 routes.use(authMiddleware)
