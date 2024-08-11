@@ -118,6 +118,14 @@ class PaymentController {
 
       console.log('Resposta do Mercado Pago:', paymentCreateResponse)
 
+      const pendingOrderResponse = await PendingOrder.create({
+        external_reference: body.external_reference,
+        email: body.payer.email,
+      })
+
+      if (!pendingOrderResponse)
+        return res.status(500).json({ message: 'Failed to save order' })
+
       return res.status(200).json(paymentCreateResponse.init_point)
     } catch (err) {
       console.log(
