@@ -2,6 +2,7 @@ import * as Yup from 'yup'
 import { MercadoPagoConfig, Preference } from 'mercadopago'
 import dotenv from 'dotenv'
 import stripeLib from 'stripe'
+import PendingOrder from '../models/PendingOrder'
 
 import { v4 } from 'uuid'
 
@@ -38,9 +39,9 @@ class PaymentController {
           },
         ],
         back_urls: {
-          success: 'https://maris-frontend.vercel.app',
-          failure: 'https://maris-frontend.vercel.app',
-          pending: 'https://maris-frontend.vercel.app',
+          success: 'http://localhost:3000',
+          failure: 'http://localhost:3000',
+          pending: 'http://localhost:3000',
         },
         auto_return: 'approved',
       }
@@ -84,7 +85,6 @@ class PaymentController {
     console.log('Dados recebidos do frontend:', req.body)
 
     try {
-      // Criação do pagamento usando a SDK do Mercado Pago
       const body = {
         transaction_amount,
         description: title,
@@ -94,12 +94,12 @@ class PaymentController {
           excluded_payment_methods: [
             { id: 'credit_card' },
             { id: 'debit_card' },
-          ], // Exclua outros métodos de pagamento se necessário
+          ],
         },
         back_urls: {
-          success: 'https://maris-frontend.vercel.app',
-          failure: 'https://maris-frontend.vercel.app',
-          pending: 'https://maris-frontend.vercel.app',
+          success: 'http://localhost:3000',
+          failure: 'http://localhost:3000',
+          pending: 'http://localhost:3000',
         },
         auto_return: 'approved',
         items,
@@ -111,16 +111,26 @@ class PaymentController {
         idempotencyKey: v4(),
       }
 
-      const response = await preference.create({ body, requestOptions })
+      const paymentCreateResponse = await preference.create({
+        body,
+        requestOptions,
+      })
 
-      console.log('Resposta do Mercado Pago:', response) // Log da resposta do Mercado Pago
+      console.log('Resposta do Mercado Pago:', paymentCreateResponse)
 
-      return res.status(200).json(response.init_point)
+      return res.status(200).json(paymentCreateResponse.init_point)
     } catch (err) {
-      console.log('Erro:', err.response ? err.response.data : err.message) // Log do erro detalhado
+      console.log(
+        'Erro:',
+        err.paymentCreateResponse
+          ? err.paymentCreateResponse.data
+          : err.message,
+      ) // Log do erro detalhado
       return res.status(500).json({
         error: 'Failed to create payment',
-        details: err.response ? err.response.data : err.message,
+        details: err.paymentCreateResponse
+          ? err.paymentCreateResponse.data
+          : err.message,
       })
     }
   }
@@ -152,8 +162,8 @@ class PaymentController {
         line_items: lineItems,
         payment_method_types: [req.body.method],
         mode: 'payment',
-        success_url: 'https://maris-frontend.vercel.app',
-        cancel_url: 'https://maris-frontend.vercel.app',
+        success_url: 'http://localhost:3000',
+        cancel_url: 'http://localhost:3000',
         customer: customer.id,
       })
 
