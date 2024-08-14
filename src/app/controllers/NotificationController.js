@@ -2,6 +2,9 @@ import axios from 'axios'
 import nodemailer from 'nodemailer'
 import stripeLib from 'stripe'
 
+import PendingOrders from '../models/'
+import Order from '../models/Order'
+
 class NotificationController {
   async handleMercadoPagoNotification(req, res) {
     const notification = req.body
@@ -27,13 +30,15 @@ class NotificationController {
         const payment = paymentResponse.data
 
         if (payment.status === 'approved') {
-          // Aqui você pode processar o pagamento aprovado, salvar no banco de dados, etc.
           console.log('Pagamento aprovado:', payment)
 
-          // Enviar email ao usuário
-          const userEmail = payment.payer.email
-          console.log('Email do usuário:', userEmail)
-          // Implementar lógica de envio de email aqui
+          const externalReference = payment.external_reference
+          const customerEmail = await PendingOrders.findOne({
+            where: { external_reference: externalReference },
+            attributes: ['email'],
+          })
+
+          await savePayment(customerEmail)
         }
       } catch (err) {
         console.error(
@@ -112,7 +117,7 @@ async function sendFailureEmail(paymentData) {
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: paymentData.receipt_email,
-      subject: 'Maris Boutiks — Erro+',
+      subject: 'Maris Boutiks — Erro',
       text: `Olá, houve um erro ao processar seu pagamento. Por favor, tente novamente.`,
     }
 
