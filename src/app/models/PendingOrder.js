@@ -7,7 +7,11 @@ class PendingOrder extends Model {
         external_reference: Sequelize.STRING,
         email: Sequelize.STRING,
       },
-      { sequelize },
+      {
+        sequelize,
+        createdAt: 'createdAt',
+        updatedAt: false,
+      },
     )
 
     return this
