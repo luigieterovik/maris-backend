@@ -2,7 +2,7 @@ import axios from 'axios'
 import nodemailer from 'nodemailer'
 import stripeLib from 'stripe'
 
-import PendingOrders from '../models/'
+import PendingOrders from '../models/PendingOrder'
 import Order from '../models/Order'
 
 class NotificationController {
