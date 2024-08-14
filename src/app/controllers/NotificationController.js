@@ -37,7 +37,7 @@ class NotificationController {
           const customerEmail = await PendingOrders.findOne({
             where: { external_reference: externalReference },
             attributes: ['email'],
-          }).dataValues.email
+          })
 
           console.log(externalReference)
           console.log('CUstomer EMAIL::::::' + customerEmail)
