@@ -62,7 +62,10 @@ class NotificationController {
             JSON.stringify(searchResponse.data, null, 2),
           )
 
-          await savePayment(customerEmail)
+          const items =
+            searchResponse.data.results[0]?.additional_info?.items || []
+
+          await savePayment()
         }
       } catch (err) {
         console.error(
@@ -120,8 +123,18 @@ class NotificationController {
   }
 }
 
-async function savePayment(userEmail) {
+async function savePayment(orderData) {
   try {
+    const response = await Order.create({
+      userId: 'be83a3c1-2ac0-44da-90d1-5521e61dba3e',
+      productId: 1,
+      quantity: 1,
+      status: 'Aprovado',
+      total: 1.0,
+    })
+
+    console.log(response)
+
     console.log('Pagamento registrado com sucesso!')
   } catch (err) {
     console.error('Erro ao registrar pagamento:', err)
