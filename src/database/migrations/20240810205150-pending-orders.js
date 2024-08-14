@@ -14,6 +14,7 @@ module.exports = {
       external_reference: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
       },
 
       email: {
