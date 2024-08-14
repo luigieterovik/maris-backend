@@ -6,10 +6,9 @@ const sequelize = new Sequelize(config.url)
 
 const deleteOldRecords = async () => {
   try {
-    const response = await sequelize.query(`
-      DELETE FROM PendingOrders
-      WHERE createdAt <= NOW() - INTERVAL '1 minute';
-    `)
+    const response = await sequelize.query(
+      `DELETE FROM "PendingOrders" WHERE createdAt <= NOW() - INTERVAL '1 minute';`,
+    )
     console.log(response)
     console.log('Registros antigos deletados com sucesso.')
   } catch (error) {
