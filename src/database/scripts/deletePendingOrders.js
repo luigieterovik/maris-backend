@@ -16,7 +16,7 @@ const deleteOldRecords = async () => {
   }
 }
 
-cron.schedule('*/1 * * * *', () => {
+cron.schedule('*/2 * * * *', () => {
   console.log('Executando tarefa agendada para deletar registros antigos')
   deleteOldRecords()
 })
