@@ -1,6 +1,7 @@
 import axios from 'axios'
 import nodemailer from 'nodemailer'
 import stripeLib from 'stripe'
+import mercadopago from 'mercadopago'
 
 import PendingOrders from '../models/PendingOrder'
 import Order from '../models/Order'
@@ -36,10 +37,18 @@ class NotificationController {
           const customerEmail = await PendingOrders.findOne({
             where: { external_reference: externalReference },
             attributes: ['email'],
-          })
+          }).dataValues.email
 
           console.log(externalReference)
-          console.log(customerEmail)
+          console.log('CUstomer EMAIL::::::' + customerEmail)
+
+          const response = await mercadopago.payment.search({
+            qs: {
+              external_reference: externalReference,
+            },
+          })
+
+          console.log('MERCADO PAGO EXTERNAL_REFERENCE SEARCH: ' + response)
 
           await savePayment(customerEmail)
         }
