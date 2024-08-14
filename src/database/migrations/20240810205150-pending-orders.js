@@ -4,10 +4,16 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('PendingOrders', {
+      id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+
       external_reference: {
         type: Sequelize.STRING,
         allowNull: false,
-        primaryKey: true,
       },
 
       email: {

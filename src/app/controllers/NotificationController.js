@@ -38,6 +38,9 @@ class NotificationController {
             attributes: ['email'],
           })
 
+          console.log(externalReference)
+          console.log(customerEmail)
+
           await savePayment(customerEmail)
         }
       } catch (err) {

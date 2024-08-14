@@ -11,7 +11,6 @@ class PendingOrder extends Model {
         sequelize,
         createdAt: 'createdAt',
         updatedAt: false,
-        id: false,
       },
     )
 
