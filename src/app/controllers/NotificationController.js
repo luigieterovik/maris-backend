@@ -42,13 +42,20 @@ class NotificationController {
           console.log(externalReference)
           console.log('CUstomer EMAIL::::::' + customerEmail)
 
-          const response = await Payment.search({
-            qs: {
-              external_reference: externalReference,
+          const searchResponse = await axios.get(
+            'https://api.mercadopago.com/v1/payments/search',
+            {
+              headers: {
+                Authorization: `Bearer ${process.env.ACCESS_TOKEN_MERCADOPAGO}`,
+              },
+              params: {
+                external_reference: externalReference,
+              },
             },
-          })
-
-          console.log('MERCADO PAGO EXTERNAL_REFERENCE SEARCH: ' + response)
+          )
+          console.log(
+            'MERCADO PAGO EXTERNAL_REFERENCE SEARCH: ' + searchResponse,
+          )
 
           await savePayment(customerEmail)
         }
