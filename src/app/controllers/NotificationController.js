@@ -34,10 +34,14 @@ class NotificationController {
           console.log('Pagamento aprovado:', payment)
 
           const externalReference = payment.external_reference
-          const customerEmail = await PendingOrders.findOne({
+          const customer = await PendingOrders.findOne({
             where: { external_reference: externalReference },
             attributes: ['email'],
           })
+
+          const customerEmail = customer ? customer.get('email') : null
+
+          console.log('Customer EMAIL:', customerEmail)
 
           console.log(externalReference)
           console.log('CUstomer EMAIL::::::' + customerEmail)
@@ -54,7 +58,8 @@ class NotificationController {
             },
           )
           console.log(
-            'MERCADO PAGO EXTERNAL_REFERENCE SEARCH: ' + searchResponse,
+            'MERCADO PAGO EXTERNAL_REFERENCE SEARCH:',
+            JSON.stringify(searchResponse.data, null, 2),
           )
 
           await savePayment(customerEmail)
