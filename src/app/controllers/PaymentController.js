@@ -154,7 +154,12 @@ class PaymentController {
 
       const { products } = req.body
 
-      console.log(products)
+      let productsIds = ''
+
+      for (let i = 0; i < products.length; i++) {
+        if (i >= 1) productsIds += ','
+        productsIds += String(products[i].id)
+      }
 
       const lineItems = products.map((product) => ({
         price_data: {
@@ -176,7 +181,7 @@ class PaymentController {
         cancel_url: 'http://localhost:3000',
         customer: customer.id,
         metadata: {
-          product_id: products,
+          product_ids: productsIds,
         },
       })
 
