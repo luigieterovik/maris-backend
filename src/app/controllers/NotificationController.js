@@ -121,8 +121,9 @@ class NotificationController {
           )
           const customerEmail = customer.email
 
-          await savePayment(customerEmail)
+          console.log(customer.metadata)
 
+          console.log(customer.metadata.product_ids)
           break
         }
 

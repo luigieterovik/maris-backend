@@ -147,11 +147,6 @@ class PaymentController {
     try {
       const stripe = stripeLib(process.env.ACCESS_TOKEN_STRIPE)
 
-      // Criação do cliente no Stripe com o e-mail fornecido
-      const customer = await stripe.customers.create({
-        email: req.body.customer_email,
-      })
-
       const { products } = req.body
 
       let productsIds = ''
@@ -160,6 +155,14 @@ class PaymentController {
         if (i >= 1) productsIds += ','
         productsIds += String(products[i].id)
       }
+
+      // Criação do cliente no Stripe com o e-mail fornecido
+      const customer = await stripe.customers.create({
+        email: req.body.customer_email,
+        metadata: {
+          product_ids: productsIds,
+        },
+      })
 
       const lineItems = products.map((product) => ({
         price_data: {
@@ -180,9 +183,6 @@ class PaymentController {
         success_url: 'http://localhost:3000',
         cancel_url: 'http://localhost:3000',
         customer: customer.id,
-        metadata: {
-          product_ids: productsIds,
-        },
       })
 
       return res.status(200).json({ id: session.id })
