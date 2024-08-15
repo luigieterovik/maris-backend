@@ -63,29 +63,10 @@ class NotificationController {
             JSON.stringify(searchResponse.data, null, 2),
           )
 
-          const user = await User.findOne({
-            where: { email: customerEmail },
-            attributes: ['id'],
-          })
-
-          const userId = user ? user.get('id') : null
+          const userId = getUserIdByEmail(customerEmail)
 
           const items =
             searchResponse.data.results[0]?.additional_info?.items || []
-
-          async function processOrder(items, userId) {
-            for (const item of items) {
-              const orderData = {
-                userId,
-                productId: item.id,
-                quantity: item.quantity,
-                status: 'Aprovado',
-                total: parseFloat(item.unit_price) * parseInt(item.quantity),
-              }
-
-              await savePayment(orderData)
-            }
-          }
 
           await processOrder(items, userId)
         }
@@ -122,10 +103,9 @@ class NotificationController {
           const customerEmail = customer.email
 
           const productDetailsString = customer.metadata.product_ids
-
-          const productsMetadata = []
-
           const productsArray = productDetailsString.split(';')
+
+          const products = []
 
           productsArray.forEach((productString) => {
             const details = productString.split(',')
@@ -138,12 +118,12 @@ class NotificationController {
               return acc
             }, {})
 
-            productsMetadata.push(productObject)
+            products.push(productObject)
           })
 
-          console.log(productsMetadata)
+          console.log(products)
 
-          console.log(customer.metadata.product_ids)
+          await processOrder(products, getUserIdByEmail(customerEmail))
           break
         }
 
@@ -205,6 +185,31 @@ async function sendFailureEmail(paymentData) {
     console.log('E-mail de falha de pagamento enviado com sucesso!')
   } catch (err) {
     console.error('Erro ao enviar e-mail de falha de pagamento:', err)
+  }
+}
+
+async function getUserIdByEmail(email) {
+  const user = await User.findOne({
+    where: { email },
+    attributes: ['id'],
+  })
+
+  const userId = user ? user.get('id') : null
+
+  return userId
+}
+
+async function processOrder(items, userId) {
+  for (const item of items) {
+    const orderData = {
+      userId,
+      productId: item.id,
+      quantity: item.quantity,
+      status: 'Aprovado',
+      total: parseFloat(item.unit_price) * parseInt(item.quantity),
+    }
+
+    await savePayment(orderData)
   }
 }
 
