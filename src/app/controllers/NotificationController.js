@@ -224,12 +224,20 @@ async function getUserIdByEmail(email) {
 
 async function processOrder(items, userId) {
   for (const item of items) {
+    const unitPrice = parseFloat(item.unit_price)
+    const quantity = parseInt(item.quantity)
+
+    if (isNaN(unitPrice) || isNaN(quantity)) {
+      console.error(`Invalid price or quantity for item ${item.id}`)
+      continue
+    }
+
     const orderData = {
       userId,
       productId: item.id,
-      quantity: item.quantity,
+      quantity,
       status: 'Aprovado',
-      total: parseFloat(item.unit_price) * parseInt(item.quantity),
+      total: unitPrice * quantity,
     }
 
     await savePayment(orderData)
