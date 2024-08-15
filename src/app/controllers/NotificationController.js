@@ -189,14 +189,29 @@ async function sendFailureEmail(paymentData) {
 }
 
 async function getUserIdByEmail(email) {
-  const user = await User.findOne({
-    where: { email },
-    attributes: ['id'],
-  })
+  try {
+    const user = await User.findOne({
+      where: { email },
+      attributes: ['id'],
+    })
 
-  const userId = user ? user.get('id') : null
+    const userId = user ? user.get('id') : null
 
-  return userId
+    if (
+      !userId ||
+      !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(
+        userId,
+      )
+    ) {
+      console.error('Invalid or missing userId:', userId)
+      return null
+    }
+
+    return userId
+  } catch (error) {
+    console.error('Error retrieving user ID:', error)
+    return null
+  }
 }
 
 async function processOrder(items, userId) {
