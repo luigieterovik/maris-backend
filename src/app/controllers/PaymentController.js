@@ -162,7 +162,6 @@ class PaymentController {
           products[i].price
       }
 
-      // Criação do cliente no Stripe com o e-mail fornecido
       const customer = await stripe.customers.create({
         email: req.body.customer_email,
         metadata: {

@@ -149,11 +149,11 @@ class NotificationController {
 async function savePayment(orderData) {
   try {
     const response = await Order.create({
-      userId: 'be83a3c1-2ac0-44da-90d1-5521e61dba3e',
-      productId: 1,
-      quantity: 1,
+      userId: orderData.userId,
+      productId: orderData.productId,
+      quantity: orderData.quantity,
       status: 'Aprovado',
-      total: 1.0,
+      total: orderData.total,
     })
 
     console.log(response)
