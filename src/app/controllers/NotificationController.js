@@ -123,10 +123,9 @@ class NotificationController {
 
           console.log(products)
 
-          await processOrder(
-            products,
-            getUserIdByEmail(JSON.stringify(customerEmail)),
-          )
+          const userId = getUserIdByEmail(JSON.stringify(customerEmail))
+
+          await processOrder(products, userId)
           break
         }
 
