@@ -5,6 +5,7 @@ import { Payment } from 'mercadopago'
 
 import PendingOrders from '../models/PendingOrder'
 import Order from '../models/Order'
+import User from '../models/User'
 
 class NotificationController {
   async handleMercadoPagoNotification(req, res) {
@@ -62,10 +63,31 @@ class NotificationController {
             JSON.stringify(searchResponse.data, null, 2),
           )
 
+          const user = await User.findOne({
+            where: { email: customerEmail },
+            attributes: ['id'],
+          })
+
+          const userId = user ? user.get('id') : null
+
           const items =
             searchResponse.data.results[0]?.additional_info?.items || []
 
-          await savePayment()
+          async function processOrder(items, userId) {
+            for (const item of items) {
+              const orderData = {
+                userId,
+                productId: item.id,
+                quantity: item.quantity,
+                status: 'Aprovado',
+                total: parseFloat(item.unit_price) * parseInt(item.quantity),
+              }
+
+              await savePayment(orderData)
+            }
+          }
+
+          await processOrder(items, userId)
         }
       } catch (err) {
         console.error(

@@ -154,6 +154,8 @@ class PaymentController {
 
       const { products } = req.body
 
+      console.log(products)
+
       const lineItems = products.map((product) => ({
         price_data: {
           currency: 'brl',
@@ -164,6 +166,9 @@ class PaymentController {
           unit_amount: product.price * 100,
         },
         quantity: product.quantity,
+        metadata: {
+          product_id: product.id,
+        },
       }))
 
       const session = await stripe.checkout.sessions.create({
