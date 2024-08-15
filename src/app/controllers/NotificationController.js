@@ -123,7 +123,15 @@ class NotificationController {
 
           console.log(products)
 
-          const userId = getUserIdByEmail(JSON.stringify(customerEmail))
+          const user = await User.findOne({
+            where: { email: customerEmail },
+            attributes: ['id'],
+          })
+
+          const userId = user ? user.get('id') : null
+
+          console.log(user)
+          console.log(userId)
 
           await processOrder(products, userId)
           break
@@ -191,29 +199,27 @@ async function sendFailureEmail(paymentData) {
 }
 
 async function getUserIdByEmail(email) {
-  try {
-    const user = await User.findOne({
-      where: { email },
-      attributes: ['id'],
-    })
+  const user = await User.findOne({
+    where: { email },
+    attributes: ['id'],
+  })
 
-    const userId = user ? user.get('id') : null
+  const userId = user ? user.get('id') : null
 
-    if (
-      !userId ||
-      !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(
-        userId,
-      )
-    ) {
-      console.error('Invalid or missing userId:', userId)
-      return null
-    }
+  console.log(user)
+  console.log(userId)
 
-    return userId
-  } catch (error) {
-    console.error('Error retrieving user ID:', error)
+  if (
+    !userId ||
+    !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(
+      userId,
+    )
+  ) {
+    console.error('Invalid or missing userId:', userId)
     return null
   }
+
+  return userId
 }
 
 async function processOrder(items, userId) {
