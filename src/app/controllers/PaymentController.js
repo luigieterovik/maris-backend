@@ -152,8 +152,14 @@ class PaymentController {
       let productsIds = ''
 
       for (let i = 0; i < products.length; i++) {
-        if (i >= 1) productsIds += ','
-        productsIds += String(products[i].id)
+        if (i >= 1) productsIds += ';'
+        productsIds +=
+          'id:' +
+          products[i].id +
+          ',qt:' +
+          products[i].quantity +
+          ',pc:' +
+          products[i].price
       }
 
       // Criação do cliente no Stripe com o e-mail fornecido

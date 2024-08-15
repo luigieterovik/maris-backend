@@ -121,7 +121,27 @@ class NotificationController {
           )
           const customerEmail = customer.email
 
-          console.log(customer.metadata)
+          const productDetailsString = customer.metadata.product_ids
+
+          const productsMetadata = []
+
+          const productsArray = productDetailsString.split(';')
+
+          productsArray.forEach((productString) => {
+            const details = productString.split(',')
+
+            const productObject = details.reduce((acc, detail) => {
+              const [key, value] = detail.split(':')
+              if (key === 'id') acc.id = value
+              if (key === 'qt') acc.quantity = parseInt(value, 10)
+              if (key === 'pc') acc.price = parseInt(value, 10)
+              return acc
+            }, {})
+
+            productsMetadata.push(productObject)
+          })
+
+          console.log(productsMetadata)
 
           console.log(customer.metadata.product_ids)
           break
