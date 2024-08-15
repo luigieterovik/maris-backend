@@ -224,7 +224,7 @@ async function getUserIdByEmail(email) {
 
 async function processOrder(items, userId) {
   for (const item of items) {
-    const unitPrice = parseFloat(item.unit_price)
+    const unitPrice = parseFloat(item.price)
     const quantity = parseInt(item.quantity)
 
     if (isNaN(unitPrice) || isNaN(quantity)) {
