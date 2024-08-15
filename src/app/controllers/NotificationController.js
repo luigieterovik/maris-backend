@@ -123,7 +123,10 @@ class NotificationController {
 
           console.log(products)
 
-          await processOrder(products, getUserIdByEmail(customerEmail))
+          await processOrder(
+            products,
+            getUserIdByEmail(JSON.stringify(customerEmail)),
+          )
           break
         }
 
