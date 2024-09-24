@@ -1,4 +1,4 @@
-import app from './app.js'
+import app from './app'
 import './database/scripts/deletePendingOrders'
 
 const port = process.env.PORT || 3001
