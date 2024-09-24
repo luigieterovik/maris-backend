@@ -1,6 +1,6 @@
 import cron from 'node-cron'
 import { Sequelize } from 'sequelize'
-import config from '../../config/database'
+import config from '../../config/database.js'
 
 const sequelize = new Sequelize(config.url)
 
