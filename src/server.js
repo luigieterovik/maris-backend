@@ -1,5 +1,5 @@
-import app from './app'
-import './database/scripts/deletePendingOrders'
+import app from './app.js'
+import './database/scripts/deletePendingOrders.js'
 
 const port = process.env.PORT || 3001
 

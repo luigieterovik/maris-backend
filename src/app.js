@@ -1,10 +1,10 @@
 import express from 'express'
-import routes from './routes'
+import routes from './routes.js'
 import { resolve } from 'path'
 import cors from 'cors'
-import NotificationController from './app/controllers/NotificationController'
+import NotificationController from './app/controllers/NotificationController.js'
 
-import './database'
+import './database/index.js'
 
 const corsOptions = {
   origin: 'http://localhost:3000',
