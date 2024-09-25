@@ -1,4 +1,4 @@
-module.exports = {
+const configDatabase = {
   dialect: 'postgres',
   url: 'postgresql://postgres:rAdFETUYpCCmfSSODPZFKPcNRdyGdTdI@autorack.proxy.rlwy.net:24767/railway',
   define: {
@@ -7,3 +7,5 @@ module.exports = {
     underscoreAll: true,
   },
 }
+
+export default configDatabase
