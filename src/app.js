@@ -1,6 +1,7 @@
 import express from 'express'
 import routes from './routes.js'
-import { resolve } from 'path'
+import { resolve, dirname } from 'path'
+import { fileURLToPath } from 'url'
 import cors from 'cors'
 import NotificationController from './app/controllers/NotificationController.js'
 
@@ -12,6 +13,9 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 class App {
   constructor() {
