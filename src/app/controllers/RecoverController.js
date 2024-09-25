@@ -2,9 +2,9 @@ import * as Yup from 'yup'
 import jwt from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
 
-import User from '../models/User'
+import User from '../models/User.js'
 
-import authConfig from '../../config/auth'
+import authConfig from '../../config/auth.js'
 
 class RecoverController {
   async store(req, res) {

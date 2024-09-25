@@ -1,11 +1,10 @@
 import axios from 'axios'
 import nodemailer from 'nodemailer'
 import stripeLib from 'stripe'
-import { Payment } from 'mercadopago'
 
-import PendingOrders from '../models/PendingOrder'
-import Order from '../models/Order'
-import User from '../models/User'
+import PendingOrders from '../models/PendingOrder.js'
+import Order from '../models/Order.js'
+import User from '../models/User.js'
 
 class NotificationController {
   async handleMercadoPagoNotification(req, res) {

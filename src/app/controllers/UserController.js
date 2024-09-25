@@ -2,9 +2,9 @@ import { v4 } from 'uuid'
 import * as Yup from 'yup'
 import jwt from 'jsonwebtoken'
 
-import authConfig from '../../config/auth'
+import authConfig from '../../config/auth.js'
 
-import User from '../models/User'
+import User from '../models/User.js'
 
 class UserController {
   async store(req, res) {
