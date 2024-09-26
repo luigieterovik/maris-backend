@@ -66,6 +66,49 @@ class OrderController {
     return res.json(orders)
   }
 
+  async getUserOrders(req, res) {
+    const schema = Yup.object().shape({
+      userId: Yup.number().required(),
+    })
+
+    try {
+      await schema.validate(req.body, { abortEarly: false })
+    } catch (err) {
+      return res.status(400).json({ error: err.errors })
+    }
+
+    const { userId } = req.params
+
+    const userOrders = await Order.findAll({
+      where: { userId },
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['name', 'email'],
+        },
+        {
+          model: Product,
+          as: 'product',
+          attributes: ['name', 'price', 'path'],
+          include: [
+            {
+              model: Category,
+              as: 'category',
+              attributes: ['name'],
+            },
+          ],
+        },
+      ],
+    })
+
+    if (!userOrders || userOrders.length === 0) {
+      return res.status(404).json({ error: 'No orders found for this user' })
+    }
+
+    return res.json(userOrders)
+  }
+
   async update(req, res) {
     const { admin: isAdmin } = await User.findByPk(req.userId)
     if (!isAdmin)
