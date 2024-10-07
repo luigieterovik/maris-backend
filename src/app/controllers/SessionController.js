@@ -34,10 +34,7 @@ class SessionController {
         .json({ error: 'Make sure your email or password are correct' })
 
     return res.status(200).json({
-      id: user.id,
-      email,
-      name: user.name,
-      admin: user.admin,
+      name: user.name.split(' ')[0],
       token: jwt.sign({ id: user.id }, authConfig.secret, {
         expiresIn: authConfig.expiresIn,
       }),
