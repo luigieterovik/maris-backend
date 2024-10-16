@@ -4,8 +4,8 @@ class Delivery extends Model {
   static init(sequelize) {
     super.init(
       {
-        id: Sequelize.INTEGER
-        idPayer: Sequelize.INTEGER
+        id: Sequelize.INTEGER,
+        idPayer: Sequelize.INTEGER,
         state: Sequelize.STRING,
         city: Sequelize.STRING,
         neighborhood: Sequelize.STRING,
