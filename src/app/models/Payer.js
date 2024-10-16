@@ -4,8 +4,8 @@ class Payer extends Model {
   static init(sequelize) {
     super.init(
       {
-        id: Sequelize.INTEGER
-        name: Sequelize.STRING
+        id: Sequelize.INTEGER,
+        name: Sequelize.STRING,
         cpf: Sequelize.STRING,
         email: Sequelize.STRING,
         phoneNumber: Sequelize.STRING,
