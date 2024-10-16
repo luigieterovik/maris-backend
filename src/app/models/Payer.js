@@ -14,6 +14,8 @@ class Payer extends Model {
         sequelize,
         createdAt: 'createdAt',
         updatedAt: false,
+        modelName: 'Payer',
+        tableName: 'Payer',
       },
     )
 
