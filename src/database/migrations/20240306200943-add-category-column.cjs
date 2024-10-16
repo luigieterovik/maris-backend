@@ -13,6 +13,6 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    await queryInterface.removeColumn('Products', 'category_id')
+    await queryInterface.removeColumn('Products', 'categoryId')
   },
 }

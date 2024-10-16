@@ -1,12 +1,14 @@
 import Sequelize, { Model } from 'sequelize'
 
-class PendingOrder extends Model {
+class Payer extends Model {
   static init(sequelize) {
     super.init(
       {
-        external_reference: Sequelize.STRING,
+        id: Sequelize.INTEGER
+        name: Sequelize.STRING
+        cpf: Sequelize.STRING,
         email: Sequelize.STRING,
-        deliveryId: Sequelize.STRING,
+        phoneNumber: Sequelize.STRING,
       },
       {
         sequelize,
@@ -19,4 +21,4 @@ class PendingOrder extends Model {
   }
 }
 
-export default PendingOrder
+export default Payer
