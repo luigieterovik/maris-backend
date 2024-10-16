@@ -73,14 +73,8 @@ class PaymentController {
 
     const preference = new Preference(client)
 
-    const {
-      transaction_amount,
-      title,
-      payer,
-      items,
-      external_reference,
-      statement_descriptor,
-    } = req.body
+    const { transaction_amount, title, payer, items, statement_descriptor } =
+      req.body
 
     console.log('Dados recebidos do frontend:', req.body)
 
@@ -103,7 +97,7 @@ class PaymentController {
         },
         auto_return: 'approved',
         items,
-        external_reference,
+        external_reference: v4(),
         statement_descriptor,
       }
 
@@ -133,7 +127,7 @@ class PaymentController {
         err.paymentCreateResponse
           ? err.paymentCreateResponse.data
           : err.message,
-      ) // Log do erro detalhado
+      )
       return res.status(500).json({
         error: 'Failed to create payment',
         details: err.paymentCreateResponse
@@ -166,6 +160,7 @@ class PaymentController {
         email: req.body.customer_email,
         metadata: {
           product_ids: productsIds,
+          external_reference: v4(),
         },
       })
 

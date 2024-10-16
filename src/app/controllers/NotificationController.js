@@ -104,6 +104,9 @@ class NotificationController {
           const productDetailsString = customer.metadata.product_ids
           const productsArray = productDetailsString.split(';')
 
+          const externalReference = customer.metadata.external_reference
+          console.log(externalReference) // EXTERNAL REFERENCE
+
           const products = []
 
           productsArray.forEach((productString) => {
