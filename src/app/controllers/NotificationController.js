@@ -104,18 +104,13 @@ class NotificationController {
           const productDetailsString = customer.metadata.product_ids
           const productsArray = productDetailsString.split(';')
 
+          console.log(productDetailsString)
+
           const externalReference = customer.metadata.external_reference
           console.log(
             '________________________-EXTERNAL REFERENCE STRIPE CUSTOMER: ' +
               externalReference,
           ) // EXTERNAL REFERENCE
-
-          const externalReferenceMetaData =
-            paymentIntentSucceeded.metadata.external_reference
-          console.log(
-            '________________________-EXTERNAL REFERENCE STRIPE METADATA:',
-            externalReferenceMetaData,
-          )
 
           const products = []
 
