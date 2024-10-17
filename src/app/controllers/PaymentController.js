@@ -162,6 +162,7 @@ class PaymentController {
         email: req.body.customer_email,
         metadata: {
           product_ids: productsIds,
+          external_reference: v4(),
         },
       })
 
@@ -184,6 +185,9 @@ class PaymentController {
         success_url: 'http://localhost:3000',
         cancel_url: 'http://localhost:3000',
         customer: customer.id,
+        metadata: {
+          external_reference: v4(),
+        },
       })
 
       return res.status(200).json({ id: session.id })
@@ -196,10 +200,10 @@ class PaymentController {
   }
 }
 
-const createPendingOrder = async () => {
+const createPendingOrder = async (external_reference, pendingDeliveryId) => {
   const pendingOrderResponse = await PendingOrder.create({
-    external_reference: body.external_reference,
-    email: body.payer.email,
+    external_reference,
+    pendingDeliveryId,
   })
 }
 
