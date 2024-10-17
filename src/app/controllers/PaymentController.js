@@ -131,6 +131,8 @@ class PaymentController {
         },
       })
 
+      console.log(session)
+
       return res.status(200).json({ id: session.id })
     } catch (error) {
       console.error('Error creating Stripe checkout session:', error)
