@@ -160,7 +160,6 @@ class PaymentController {
         email: req.body.customer_email,
         metadata: {
           product_ids: productsIds,
-          external_reference: v4(),
         },
       })
 
