@@ -9,6 +9,7 @@ import { v4 } from 'uuid'
 dotenv.config()
 
 class PaymentController {
+  /*
   async mercadopago(req, res) {
     const schema = Yup.object().shape({
       title: Yup.string().required(),
@@ -65,6 +66,7 @@ class PaymentController {
       })
     }
   }
+    */
 
   async pix(req, res) {
     const client = new MercadoPagoConfig({
@@ -192,6 +194,13 @@ class PaymentController {
         .json({ error: 'Failed to create Stripe checkout session' })
     }
   }
+}
+
+const createPendingOrder = async () => {
+  const pendingOrderResponse = await PendingOrder.create({
+    external_reference: body.external_reference,
+    email: body.payer.email,
+  })
 }
 
 export default new PaymentController()

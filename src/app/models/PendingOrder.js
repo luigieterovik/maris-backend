@@ -5,7 +5,6 @@ class PendingOrder extends Model {
     super.init(
       {
         external_reference: Sequelize.STRING,
-        email: Sequelize.STRING,
         deliveryId: Sequelize.STRING,
       },
       {
