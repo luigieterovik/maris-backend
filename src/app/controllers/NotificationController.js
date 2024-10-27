@@ -119,7 +119,7 @@ class NotificationController {
           )
 
           console.log(
-            'METADATATESTTTTTTTTTTTTTTTT' + JSON.stringify(lineItems, null, 2),
+            'METADATATESTTTTTTTTTTTTTTTT' + JSON.stringify(metadataTest, null, 2),
           )
 
           const lineItems = await stripe.checkout.sessions.listLineItems(
