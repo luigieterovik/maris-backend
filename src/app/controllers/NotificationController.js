@@ -119,8 +119,15 @@ class NotificationController {
           )
 
           console.log(
-            '________LINE ITEMSSSS TESTTT: ' + JSON.stringify(lineItems),
+            '________LINE ITEMSSSS TESTTT:',
+            JSON.stringify(lineItems, null, 2),
           )
+
+          console.log("_________LINE ITEMS 2:")
+          lineItems.data.forEach((item, index) => {
+            console.log(`Item ${index + 1}:`, JSON.stringify(item, null, 2));
+        });
+        
 
           const products = []
 
