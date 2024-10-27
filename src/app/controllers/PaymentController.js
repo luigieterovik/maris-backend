@@ -3,8 +3,11 @@ import { MercadoPagoConfig, Preference } from 'mercadopago'
 import dotenv from 'dotenv'
 import stripeLib from 'stripe'
 import PendingOrder from '../models/PendingOrder.js'
+import PendingPayer from '../models/PendingPayer.js'
+import PendingDelivery from '../models/PendingDelivery.js'
 
 import { v4 } from 'uuid'
+import PendingDelivery from '../models/PendingDelivery.js'
 
 dotenv.config()
 
@@ -86,25 +89,12 @@ class PaymentController {
 
       const { products } = req.body
 
-      let productsIds = ''
-
-      for (let i = 0; i < products.length; i++) {
-        if (i >= 1) productsIds += ';'
-        productsIds +=
-          'id:' +
-          products[i].id +
-          ',qt:' +
-          products[i].quantity +
-          ',pc:' +
-          products[i].price
-      }
+      const productsIds = products
+        .map((product) => `id:${product.id}`)
+        .join(';')
 
       const customer = await stripe.customers.create({
         email: req.body.customer_email,
-        metadata: {
-          product_ids: productsIds,
-          external_reference: v4(),
-        },
       })
 
       const lineItems = products.map((product) => ({
@@ -132,6 +122,17 @@ class PaymentController {
       })
 
       console.log(session)
+
+      const { payerData } = req.body
+
+      const pendingPayerResponse = await PendingPayer.create({
+        name: payerData.fullname,
+        cpf: payerData.cpf,
+        email: payerData.email,
+        phoneNumber: payerData.phoneNumber,
+      })
+      console.log(pendingPayerResponse)
+
 
       return res.status(200).json({ id: session.id })
     } catch (error) {
