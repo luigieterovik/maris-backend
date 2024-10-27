@@ -116,7 +116,7 @@ class PaymentController {
           },
           unit_amount: product.price * 100,
         },
-        quantity: product.quantity
+        quantity: product.quantity,
       }))
 
       const session = await stripe.checkout.sessions.create({
@@ -127,7 +127,7 @@ class PaymentController {
         cancel_url: 'http://localhost:3000',
         customer: customer.id,
         metadata: {
-          external_reference: v4(),
+          product_ids: productsIds,
         },
       })
 
