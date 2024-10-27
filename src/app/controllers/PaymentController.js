@@ -116,11 +116,7 @@ class PaymentController {
           },
           unit_amount: product.price * 100,
         },
-        quantity: product.quantity,
-        // Adicione o ID do produto no metadata para recuperar depois
-        metadata: {
-          product_id: product.id,
-        },
+        quantity: product.quantity
       }))
 
       const session = await stripe.checkout.sessions.create({
