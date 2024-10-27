@@ -67,6 +67,8 @@ class NotificationController {
           const items =
             searchResponse.data.results[0]?.additional_info?.items || []
 
+          console.log(items)
+
           await processOrder(items, userId)
         }
       } catch (err) {
