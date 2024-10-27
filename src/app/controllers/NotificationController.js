@@ -118,7 +118,9 @@ class NotificationController {
             'cs_test_b1VPbH6BTFohLp8jXCqrL2j5qIjzzvEEuVzYWZHR1iEBvZQTTjtfiH1HQq',
           )
 
-          console.log('________LINE ITEMSSSS TESTTT: ' + lineItems)
+          console.log(
+            '________LINE ITEMSSSS TESTTT: ' + JSON.stringify(lineItems),
+          )
 
           const products = []
 
