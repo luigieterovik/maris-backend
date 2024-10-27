@@ -114,6 +114,14 @@ class NotificationController {
               externalReference,
           ) // EXTERNAL REFERENCE
 
+          const metadataTest = await stripe.checkout.sessions(
+            'cs_test_b1VPbH6BTFohLp8jXCqrL2j5qIjzzvEEuVzYWZHR1iEBvZQTTjtfiH1HQq',
+          )
+
+          console.log(
+            'METADATATESTTTTTTTTTTTTTTTT' + JSON.stringify(lineItems, null, 2),
+          )
+
           const lineItems = await stripe.checkout.sessions.listLineItems(
             'cs_test_b1VPbH6BTFohLp8jXCqrL2j5qIjzzvEEuVzYWZHR1iEBvZQTTjtfiH1HQq',
           )
@@ -123,11 +131,10 @@ class NotificationController {
             JSON.stringify(lineItems, null, 2),
           )
 
-          console.log("_________LINE ITEMS 2:")
+          console.log('_________LINE ITEMS 2:')
           lineItems.data.forEach((item, index) => {
-            console.log(`Item ${index + 1}:`, JSON.stringify(item, null, 2));
-        });
-        
+            console.log(`Item ${index + 1}:`, JSON.stringify(item, null, 2))
+          })
 
           const products = []
 
