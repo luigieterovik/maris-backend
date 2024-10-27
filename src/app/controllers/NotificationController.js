@@ -114,7 +114,7 @@ class NotificationController {
               externalReference,
           ) // EXTERNAL REFERENCE
 
-          const metadataTest = await stripe.checkout.sessions(
+          const metadataTest = await stripe.checkout.sessions.retrieve(
             'cs_test_b1VPbH6BTFohLp8jXCqrL2j5qIjzzvEEuVzYWZHR1iEBvZQTTjtfiH1HQq',
           )
 
