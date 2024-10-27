@@ -114,6 +114,12 @@ class NotificationController {
               externalReference,
           ) // EXTERNAL REFERENCE
 
+          const lineItems = await stripe.checkout.sessions.listLineItems(
+            'cs_test_b1VPbH6BTFohLp8jXCqrL2j5qIjzzvEEuVzYWZHR1iEBvZQTTjtfiH1HQq',
+          )
+
+          console.log('________LINE ITEMSSSS TESTTT: ' + lineItems)
+
           const products = []
 
           productsArray.forEach((productString) => {
@@ -142,7 +148,7 @@ class NotificationController {
           console.log(user)
           console.log(userId)
 
-          await processOrder(products, userId)
+          // await processOrder(products, userId)
           break
         }
 
