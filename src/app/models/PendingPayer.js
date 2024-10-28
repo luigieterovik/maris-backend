@@ -8,6 +8,7 @@ class PendingPayer extends Model {
         cpf: Sequelize.STRING,
         email: Sequelize.STRING,
         phoneNumber: Sequelize.STRING,
+        recipient: Sequelize.STRING,
       },
       {
         sequelize,
