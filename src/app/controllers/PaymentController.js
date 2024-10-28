@@ -124,6 +124,8 @@ class PaymentController {
 
       const { payerData } = req.body
 
+      console.log(payerData)
+
       const pendingPayerResponse = await PendingPayer.create({
         name: payerData.fullname,
         cpf: payerData.cpf,
@@ -131,7 +133,6 @@ class PaymentController {
         phoneNumber: payerData.phoneNumber,
       })
       console.log(pendingPayerResponse)
-
 
       return res.status(200).json({ id: session.id })
     } catch (error) {
