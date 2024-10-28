@@ -137,12 +137,10 @@ class PaymentController {
       })
       console.log(pendingPayerResponse)
 
-      // Acesso ao ID do PendingPayer
-      const pendingPayerId = pendingPayerResponse.dataValues.id // Acesso ao dataValues
+      const pendingPayerId = pendingPayerResponse.dataValues.id 
       console.log(`PendingPayer ID: ${pendingPayerId}`)
 
-      // Acesso ao ID do PendingPayer
-      const pendingPayerId = pendingPayerResponse.id // Acesso ao dataValues
+      const pendingPayerId2 = pendingPayerResponse.id
       console.log(`PendingPayer ID: ${pendingPayerId}`)
 
       return res.status(200).json({ id: session.id })
