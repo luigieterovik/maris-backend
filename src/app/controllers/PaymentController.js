@@ -125,6 +125,7 @@ class PaymentController {
       const { payerData } = req.body
       const { deliveryData } = req.body
 
+      console.log(payerData)
       console.log(deliveryData)
 
       const pendingPayerResponse = await PendingPayer.create({
