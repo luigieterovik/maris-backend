@@ -12,7 +12,7 @@ class PendingPayer extends Model {
       {
         sequelize,
         createdAt: 'createdAt',
-        updatedAt: false,
+        updatedAt: 'updatedAt',
       },
     )
 
