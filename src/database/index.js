@@ -10,6 +10,7 @@ import PendingOrder from '../app/models/PendingOrder.js'
 import Payer from '../app/models/Payer.js'
 import Delivery from '../app/models/Delivery.js'
 import PendingDelivery from '../app/models/PendingDelivery.js'
+import PendingPayer from '../app/models/PendingPayer.js'
 
 const models = [
   User,
@@ -21,6 +22,7 @@ const models = [
   Delivery,
   PendingOrder,
   PendingDelivery,
+  PendingPayer,
 ]
 
 class Database {
