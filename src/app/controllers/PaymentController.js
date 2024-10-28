@@ -7,7 +7,6 @@ import PendingPayer from '../models/PendingPayer.js'
 import PendingDelivery from '../models/PendingDelivery.js'
 
 import { v4 } from 'uuid'
-import PendingDelivery from '../models/PendingDelivery.js'
 
 dotenv.config()
 
