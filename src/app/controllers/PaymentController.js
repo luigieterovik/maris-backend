@@ -129,6 +129,7 @@ class PaymentController {
         cpf: payerData.cpf,
         email: payerData.email,
         phoneNumber: payerData.phoneNumber,
+        recipient: req.body.deliveryData.recipient,
       })
       console.log(pendingPayerResponse)
 
