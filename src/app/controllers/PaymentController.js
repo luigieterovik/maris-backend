@@ -194,7 +194,9 @@ class PaymentController {
         userId,
       })
 
-      console.log(`PENDING ORDER RESPONSE: ${pendingOrderResponse}`)
+      console.log(
+        `PENDING ORDER RESPONSE: ${JSON.stringify(pendingOrderResponse)}`,
+      )
 
       return res.status(200).json({ id: session.id })
     } catch (error) {
