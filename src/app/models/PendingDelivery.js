@@ -17,6 +17,7 @@ class PendingDelivery extends Model {
         sequelize,
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
+        tableName: 'PendingDelivery',
       },
     )
 
