@@ -157,30 +157,29 @@ class NotificationController {
             },
           })
 
-          console.log("FOUND PENDING ORDER:")
+          console.log('FOUND PENDING ORDER:')
           console.log(foundPendingOrder)
           console.log(JSON.stringify(foundPendingOrder))
 
           const foundPendingDelivery = await PendingDelivery.findOne({
             where: {
-              foundPendingOrder.pendingDeliveryId
-            }
+              id: foundPendingOrder.pendingDeliveryId,
+            },
           })
 
-          console.log("FOUND PENDING DEVLIERY:")
+          console.log('FOUND PENDING DEVLIERY:')
           console.log(foundPendingDelivery)
           console.log(JSON.stringify(foundPendingDelivery))
 
           const foundPendingPayer = await PendingPayer.findOne({
             where: {
-              foundPendingDelivery.idPayer
-            }
+              id: foundPendingDelivery.idPayer,
+            },
           })
 
-          console.log("FOUND PENDING PAYER:")
+          console.log('FOUND PENDING PAYER:')
           console.log(foundPendingPayer)
           console.log(JSON.stringify(foundPendingPayer))
-
 
           // const products = []
 
