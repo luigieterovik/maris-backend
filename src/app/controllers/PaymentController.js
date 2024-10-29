@@ -104,9 +104,6 @@ class PaymentController {
           product_data: {
             name: product.name,
             images: [product.image],
-            metadata: {
-              id: product.id,
-            },
           },
           unit_amount: product.price * 100,
         },
