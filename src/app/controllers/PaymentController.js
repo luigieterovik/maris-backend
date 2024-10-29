@@ -130,15 +130,32 @@ class PaymentController {
       console.log(payerData)
       console.log(deliveryData)
 
-      const pendingPayerResponse = await PendingPayer.create({
-        name: payerData.fullName,
-        cpf: payerData.cpf,
-        email: payerData.email,
-        phoneNumber: payerData.phoneNumber,
-        recipient: deliveryData.recipient,
+      const existingPayer = await PendingPayer.findOne({
+        where: {
+          name: payerData.fullName,
+          cpf: payerData.cpf,
+          email: payerData.email,
+          phoneNumber: payerData.phoneNumber,
+          recipient: deliveryData.recipient,
+        },
       })
 
-      const pendingPayerId = pendingPayerResponse.dataValues.id
+      let pendingPayerId
+
+      if (existingPayer) {
+        pendingPayerId = existingPayer.dataValues.id
+      } else {
+        const pendingPayerResponse = await PendingPayer.create({
+          name: payerData.fullName,
+          cpf: payerData.cpf,
+          email: payerData.email,
+          phoneNumber: payerData.phoneNumber,
+          recipient: deliveryData.recipient,
+        })
+
+        pendingPayerId = pendingPayerResponse.dataValues.id
+      }
+
       console.log(`PendingPayer ID: ${pendingPayerId}`)
 
       const pendingDeliveryResponse = await PendingDelivery.create({
