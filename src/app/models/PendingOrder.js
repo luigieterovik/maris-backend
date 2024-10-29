@@ -6,6 +6,7 @@ class PendingOrder extends Model {
       {
         external_reference: Sequelize.STRING,
         pendingDeliveryId: Sequelize.STRING,
+        userId: Sequelize.UUID,
       },
       {
         sequelize,
