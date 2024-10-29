@@ -114,18 +114,21 @@ class NotificationController {
           //     externalReference,
           // ) // EXTERNAL REFERENCE
 
-          console.log("SEARCHING FOR EXTERNAL_REFERENCES:" + paymentIntentSucceeded)
+          console.log(
+            'SEARCHING FOR EXTERNAL_REFERENCES:' + paymentIntentSucceeded,
+          )
 
           const metadataTest = await stripe.checkout.sessions.retrieve(
-            'cs_test_b1VPbH6BTFohLp8jXCqrL2j5qIjzzvEEuVzYWZHR1iEBvZQTTjtfiH1HQq',
+            'cs_test_b1GDpk3cntEaFKzX68sg623HANnalM1vdQ8KEwSKucerC5pmBh06bMDm59',
           )
 
           console.log(
-            'METADATATESTTTTTTTTTTTTTTTT' + JSON.stringify(metadataTest.metadata, null, 2),
+            'METADATATESTTTTTTTTTTTTTTTT' +
+              JSON.stringify(metadataTest.metadata, null, 2),
           )
 
           const lineItems = await stripe.checkout.sessions.listLineItems(
-            'cs_test_b1VPbH6BTFohLp8jXCqrL2j5qIjzzvEEuVzYWZHR1iEBvZQTTjtfiH1HQq',
+            'cs_test_b1GDpk3cntEaFKzX68sg623HANnalM1vdQ8KEwSKucerC5pmBh06bMDm59',
           )
 
           console.log(
@@ -156,15 +159,15 @@ class NotificationController {
 
           // console.log(products)
 
-          const user = await User.findOne({
-            where: { email: customerEmail },
-            attributes: ['id'],
-          })
+          // const user = await User.findOne({
+          //   where: { email: customerEmail },
+          //   attributes: ['id'],
+          // })
 
-          const userId = user ? user.get('id') : null
+          // const userId = user ? user.get('id') : null
 
-          console.log(user)
-          console.log(userId)
+          // console.log(user)
+          // console.log(userId)
 
           // await processOrder(products, userId)
           break
