@@ -5,7 +5,7 @@ class PendingOrder extends Model {
     super.init(
       {
         external_reference: Sequelize.STRING,
-        deliveryId: Sequelize.STRING,
+        pendingDeliveryId: Sequelize.STRING,
       },
       {
         sequelize,
