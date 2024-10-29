@@ -161,19 +161,23 @@ class PaymentController {
 
       console.log(userToken)
 
+      let userId
       try {
         const tokenPayload = jwt.verify(userToken, process.env.JWT_SECRET)
         console.log(`Token payload: ${JSON.stringify(tokenPayload)}`)
+        userId = tokenPayload.id
       } catch (err) {
         console.error('Token inválido ou expirado:', err)
         return null
       }
 
       const pendingOrderResponse = PendingOrder.create({
-        external_reference,
-        pendingDeliveryId,
+        external_reference: session.id,
+        pendingDeliveryId: pendingDeliveryResponse.dataValues.id,
         userId,
       })
+
+      console.log(`PENDING ORDER RESPONSE: ${pendingOrderResponse}`)
 
       return res.status(200).json({ id: session.id })
     } catch (error) {
