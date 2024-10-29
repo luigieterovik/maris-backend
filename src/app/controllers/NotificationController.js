@@ -163,7 +163,7 @@ class NotificationController {
 
           const foundPendingDelivery = await PendingDelivery.findOne({
             where: {
-              PendingOrder.pendingDeliveryId
+              foundPendingOrder.pendingDeliveryId
             }
           })
 
