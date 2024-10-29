@@ -138,23 +138,23 @@ class NotificationController {
             console.log(`Item ${index + 1}:`, JSON.stringify(item, null, 2))
           })
 
-          const products = []
+          // const products = []
 
-          productsArray.forEach((productString) => {
-            const details = productString.split(',')
+          // productsArray.forEach((productString) => {
+          //   const details = productString.split(',')
 
-            const productObject = details.reduce((acc, detail) => {
-              const [key, value] = detail.split(':')
-              if (key === 'id') acc.id = value
-              if (key === 'qt') acc.quantity = parseInt(value, 10)
-              if (key === 'pc') acc.price = parseInt(value, 10)
-              return acc
-            }, {})
+          //   const productObject = details.reduce((acc, detail) => {
+          //     const [key, value] = detail.split(':')
+          //     if (key === 'id') acc.id = value
+          //     if (key === 'qt') acc.quantity = parseInt(value, 10)
+          //     if (key === 'pc') acc.price = parseInt(value, 10)
+          //     return acc
+          //   }, {})
 
-            products.push(productObject)
-          })
+          //   products.push(productObject)
+          // })
 
-          console.log(products)
+          // console.log(products)
 
           const user = await User.findOne({
             where: { email: customerEmail },
