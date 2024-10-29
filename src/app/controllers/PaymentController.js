@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 import stripeLib from 'stripe'
 import jwt from 'jsonwebtoken'
 
-import PendingOrder from '../models/PendingOrder.js'
+import PendingOrder from '../models/PendingOrders.js'
 import PendingPayer from '../models/PendingPayer.js'
 import PendingDelivery from '../models/PendingDelivery.js'
 

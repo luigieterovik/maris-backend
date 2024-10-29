@@ -1,6 +1,6 @@
 import Sequelize, { Model } from 'sequelize'
 
-class PendingOrder extends Model {
+class PendingOrders extends Model {
   static init(sequelize) {
     super.init(
       {
@@ -12,7 +12,7 @@ class PendingOrder extends Model {
         sequelize,
         createdAt: 'createdAt',
         updatedAt: false,
-        tableName: 'PendingOrder',
+        tableName: 'PendingOrders',
       },
     )
 
@@ -20,4 +20,4 @@ class PendingOrder extends Model {
   }
 }
 
-export default PendingOrder
+export default PendingOrders
