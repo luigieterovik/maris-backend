@@ -163,7 +163,7 @@ class PaymentController {
 
       try {
         const tokenPayload = jwt.verify(userToken, process.env.JWT_SECRET)
-        console.log(`Token payload: ${tokenPayload}`)
+        console.log(`Token payload: ${JSON.stringify(tokenPayload)}`)
       } catch (err) {
         console.error('Token inválido ou expirado:', err)
         return null
