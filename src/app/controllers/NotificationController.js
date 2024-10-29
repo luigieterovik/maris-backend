@@ -98,21 +98,23 @@ class NotificationController {
         case 'payment_intent.succeeded': {
           const paymentIntentSucceeded = event.data.object
 
-          const customer = await stripe.customers.retrieve(
-            paymentIntentSucceeded.customer,
-          )
-          const customerEmail = customer.email
+          // // const customer = await stripe.customers.retrieve(
+          // //   paymentIntentSucceeded.customer,
+          // // )
+          // // const customerEmail = customer.email
 
-          const productDetailsString = customer.metadata.product_ids
-          const productsArray = productDetailsString.split(';')
+          // // const productDetailsString = customer.metadata.product_ids
+          // // const productsArray = productDetailsString.split(';')
 
-          console.log(productDetailsString)
+          // console.log(productDetailsString)
 
-          const externalReference = customer.metadata.external_reference
-          console.log(
-            '________________________-EXTERNAL REFERENCE STRIPE CUSTOMER: ' +
-              externalReference,
-          ) // EXTERNAL REFERENCE
+          // const externalReference = customer.metadata.external_reference
+          // console.log(
+          //   '________________________-EXTERNAL REFERENCE STRIPE CUSTOMER: ' +
+          //     externalReference,
+          // ) // EXTERNAL REFERENCE
+
+          console.log("SEARCHING FOR EXTERNAL_REFERENCES:" + paymentIntentSucceeded)
 
           const metadataTest = await stripe.checkout.sessions.retrieve(
             'cs_test_b1VPbH6BTFohLp8jXCqrL2j5qIjzzvEEuVzYWZHR1iEBvZQTTjtfiH1HQq',
