@@ -135,13 +135,43 @@ class PaymentController {
         phoneNumber: payerData.phoneNumber,
         recipient: deliveryData.recipient,
       })
-      console.log(pendingPayerResponse)
 
-      const pendingPayerId = pendingPayerResponse.dataValues.id 
+      const pendingPayerId = pendingPayerResponse.dataValues.id
       console.log(`PendingPayer ID: ${pendingPayerId}`)
 
-      const pendingPayerId2 = pendingPayerResponse.id
-      console.log(`PendingPayer ID: ${pendingPayerId}`)
+      const pendingDeliveryResponse = await PendingDelivery.create({
+        idPayer: pendingPayerId,
+        state: deliveryData.state,
+        city: deliveryData.city,
+        neighborhood: deliveryData.neighborhood,
+        street: deliveryData.address,
+        houseNumber: deliveryData.houseNumber,
+        cep: deliveryData.cep,
+        complement: deliveryData.complement,
+      })
+
+      console.log(pendingDeliveryResponse)
+      console.log(
+        `PendingDelivery ID: ${pendingDeliveryResponse.dataValues.id}`,
+      )
+
+      const { userToken } = req.body
+
+      console.log(userToken)
+
+      try {
+        const tokenPayload = jwt.verify(userToken, process.env.JWT_SECRET)
+        console.log(`Token payload: ${tokenPayload}`)
+      } catch (err) {
+        console.error('Token inválido ou expirado:', err)
+        return null
+      }
+
+      const pendingOrderResponse = PendingOrder.create({
+        external_reference,
+        pendingDeliveryId,
+        userId,
+      })
 
       return res.status(200).json({ id: session.id })
     } catch (error) {
