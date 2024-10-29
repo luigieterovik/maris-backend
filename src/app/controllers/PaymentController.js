@@ -110,6 +110,8 @@ class PaymentController {
         quantity: product.quantity,
       }))
 
+      const external_reference = v4()
+
       const session = await stripe.checkout.sessions.create({
         line_items: lineItems,
         payment_method_types: [req.body.method],
@@ -119,6 +121,7 @@ class PaymentController {
         customer: customer.id,
         metadata: {
           product_ids: productsIds,
+          external_reference: external_reference,
         },
       })
 
@@ -189,7 +192,7 @@ class PaymentController {
       }
 
       const pendingOrderResponse = PendingOrders.create({
-        external_reference: session.id,
+        external_reference: external_reference,
         pendingDeliveryId: pendingDeliveryResponse.dataValues.id,
         userId,
       })
