@@ -114,6 +114,25 @@ class NotificationController {
           //     externalReference,
           // ) // EXTERNAL REFERENCE
 
+          const paymentIntentId = paymentIntentSucceeded.id
+
+          try {
+            const sessions = await stripe.checkout.sessions.list({
+              payment_intent: paymentIntentId,
+            })
+
+            if (sessions.data.length > 0) {
+              const checkoutSession = sessions.data[0]
+
+              console.log(checkoutSession.metadata)
+              console.log(checkoutSession.customer)
+            } else {
+              console.log('Nenhuma sessão encontrada para o Payment Intent')
+            }
+          } catch (error) {
+            console.error('Erro ao buscar sessão:', error)
+          }
+
           console.log(
             'SEARCHING FOR EXTERNAL_REFERENCES:' +
               JSON.stringify(paymentIntentSucceeded, null, 2),
