@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 import stripeLib from 'stripe'
 import jwt from 'jsonwebtoken'
 
-import PendingOrder from '../models/PendingOrders.js'
+import PendingOrders from '../models/PendingOrders.js'
 import PendingPayer from '../models/PendingPayer.js'
 import PendingDelivery from '../models/PendingDelivery.js'
 
@@ -59,7 +59,7 @@ class PaymentController {
 
       console.log('Resposta do Mercado Pago:', paymentCreateResponse)
 
-      const pendingOrderResponse = await PendingOrder.create({
+      const pendingOrderResponse = await PendingOrders.create({
         external_reference: body.external_reference,
         email: body.payer.email,
       })
@@ -188,7 +188,7 @@ class PaymentController {
         return null
       }
 
-      const pendingOrderResponse = PendingOrder.create({
+      const pendingOrderResponse = PendingOrders.create({
         external_reference: session.id,
         pendingDeliveryId: pendingDeliveryResponse.dataValues.id,
         userId,
@@ -209,7 +209,7 @@ class PaymentController {
 }
 
 // async function createPendingOrder(external_reference, pendingDeliveryId) {
-//   const pendingOrderResponse = await PendingOrder.create({
+//   const pendingOrderResponse = await PendingOrders.create({
 //     external_reference,
 //     pendingDeliveryId,
 //   })

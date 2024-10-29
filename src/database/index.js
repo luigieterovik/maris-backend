@@ -6,7 +6,7 @@ import User from '../app/models/User.js'
 import Product from '../app/models/Product.js'
 import Category from '../app/models/Category.js'
 import Order from '../app/models/Order.js'
-import PendingOrder from '../app/models/PendingOrder.js'
+import PendingOrders from '../app/models/PendingOrders.js'
 import Payer from '../app/models/Payer.js'
 import Delivery from '../app/models/Delivery.js'
 import PendingDelivery from '../app/models/PendingDelivery.js'
@@ -17,10 +17,9 @@ const models = [
   Product,
   Category,
   Order,
-  PendingOrder,
+  PendingOrders,
   Payer,
   Delivery,
-  PendingOrder,
   PendingDelivery,
   PendingPayer,
 ]

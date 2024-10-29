@@ -2,7 +2,7 @@ import axios from 'axios'
 import nodemailer from 'nodemailer'
 import stripeLib from 'stripe'
 
-import PendingOrders from '../models/PendingOrder.js'
+import PendingOrders from '../models/PendingOrders.js'
 import Order from '../models/Order.js'
 import User from '../models/User.js'
 
