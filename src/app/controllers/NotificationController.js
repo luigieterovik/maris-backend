@@ -3,6 +3,7 @@ import nodemailer from 'nodemailer'
 import stripeLib from 'stripe'
 
 import PendingOrders from '../models/PendingOrders.js'
+import PendingDelivery from '../models/PendingDelivery.js'
 import Order from '../models/Order.js'
 import User from '../models/User.js'
 
@@ -116,6 +117,9 @@ class NotificationController {
 
           const paymentIntentId = paymentIntentSucceeded.id
 
+          let externalReference
+          let productsIds
+          let sessionId
           try {
             const sessions = await stripe.checkout.sessions.list({
               payment_intent: paymentIntentId,
@@ -124,8 +128,14 @@ class NotificationController {
             if (sessions.data.length > 0) {
               const checkoutSession = sessions.data[0]
 
+              console.log(
+                'ID para por no line items??????' + checkoutSession.id,
+              )
+
               console.log(checkoutSession.metadata)
-              console.log(checkoutSession.customer)
+              sessionId = checkoutSession.id
+              externalReference = checkoutSession.metadata.external_reference
+              productsIds = checkoutSession.metadata.product_ids
             } else {
               console.log('Nenhuma sessão encontrada para o Payment Intent')
             }
@@ -133,33 +143,44 @@ class NotificationController {
             console.error('Erro ao buscar sessão:', error)
           }
 
-          console.log(
-            'SEARCHING FOR EXTERNAL_REFERENCES:' +
-              JSON.stringify(paymentIntentSucceeded, null, 2),
-          )
-
-          const metadataTest = await stripe.checkout.sessions.retrieve(
-            'cs_test_b1GDpk3cntEaFKzX68sg623HANnalM1vdQ8KEwSKucerC5pmBh06bMDm59',
-          )
-
-          console.log(
-            'METADATATESTTTTTTTTTTTTTTTT' +
-              JSON.stringify(metadataTest.metadata, null, 2),
-          )
-
-          const lineItems = await stripe.checkout.sessions.listLineItems(
-            'cs_test_b1GDpk3cntEaFKzX68sg623HANnalM1vdQ8KEwSKucerC5pmBh06bMDm59',
-          )
-
-          console.log(
-            '________LINE ITEMSSSS TESTTT:',
-            JSON.stringify(lineItems, null, 2),
-          )
+          const lineItems =
+            await stripe.checkout.sessions.listLineItems(sessionId)
 
           console.log('_________LINE ITEMS 2:')
           lineItems.data.forEach((item, index) => {
             console.log(`Item ${index + 1}:`, JSON.stringify(item, null, 2))
           })
+
+          const foundPendingOrder = await PendingOrders.findOne({
+            where: {
+              external_reference: externalReference,
+            },
+          })
+
+          console.log("FOUND PENDING ORDER:")
+          console.log(foundPendingOrder)
+          console.log(JSON.stringify(foundPendingOrder))
+
+          const foundPendingDelivery = await PendingDelivery.findOne({
+            where: {
+              PendingOrder.pendingDeliveryId
+            }
+          })
+
+          console.log("FOUND PENDING DEVLIERY:")
+          console.log(foundPendingDelivery)
+          console.log(JSON.stringify(foundPendingDelivery))
+
+          const foundPendingPayer = await PendingPayer.findOne({
+            where: {
+              foundPendingDelivery.idPayer
+            }
+          })
+
+          console.log("FOUND PENDING PAYER:")
+          console.log(foundPendingPayer)
+          console.log(JSON.stringify(foundPendingPayer))
+
 
           // const products = []
 

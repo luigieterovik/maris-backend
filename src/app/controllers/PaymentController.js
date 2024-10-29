@@ -191,7 +191,7 @@ class PaymentController {
         return null
       }
 
-      const pendingOrderResponse = PendingOrders.create({
+      const pendingOrderResponse = await PendingOrders.create({
         external_reference: external_reference,
         pendingDeliveryId: pendingDeliveryResponse.dataValues.id,
         userId,
