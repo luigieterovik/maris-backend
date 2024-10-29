@@ -116,7 +116,7 @@ class NotificationController {
 
           console.log(
             'SEARCHING FOR EXTERNAL_REFERENCES:' +
-              JSON.stringify(paymentIntentSucceeded),
+              JSON.stringify(paymentIntentSucceeded, null, 2),
           )
 
           const metadataTest = await stripe.checkout.sessions.retrieve(
