@@ -13,7 +13,7 @@ class PendingPayer extends Model {
       {
         sequelize,
         createdAt: 'createdAt',
-        updatedAt: 'updatedAt',
+        updatedAt: false,
         tableName: 'PendingPayer',
       },
     )
