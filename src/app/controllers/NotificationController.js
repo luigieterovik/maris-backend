@@ -4,6 +4,7 @@ import stripeLib from 'stripe'
 
 import PendingOrders from '../models/PendingOrders.js'
 import PendingDelivery from '../models/PendingDelivery.js'
+import PendingPayer from '../models/PendingPayer.js'
 import Order from '../models/Order.js'
 import User from '../models/User.js'
 
