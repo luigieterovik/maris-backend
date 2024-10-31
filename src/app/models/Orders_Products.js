@@ -16,4 +16,4 @@ class Orders_Products extends Model {
   }
 }
 
-export defaul Orders_Products
+export default Orders_Products
