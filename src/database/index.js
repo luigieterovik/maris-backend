@@ -20,7 +20,7 @@ const models = [
   Order,
   PendingOrders,
   Payer,
-  Orders_Products
+  Orders_Products,
   Delivery,
   PendingDelivery,
   PendingPayer,
