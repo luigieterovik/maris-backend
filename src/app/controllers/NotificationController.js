@@ -6,6 +6,9 @@ import PendingOrders from '../models/PendingOrders.js'
 import PendingDelivery from '../models/PendingDelivery.js'
 import PendingPayer from '../models/PendingPayer.js'
 import Order from '../models/Order.js'
+import Delivery from '../models/Delivery.js'
+import Orders_Products from '../models/Orders_Products.js'
+import Payer from '../models/Payer.js'
 import User from '../models/User.js'
 
 class NotificationController {
@@ -118,25 +121,17 @@ class NotificationController {
 
           const paymentIntentId = paymentIntentSucceeded.id
 
-          let externalReference
-          let productsIds
-          let sessionId
+          let stringProductsIds
+          let checkoutSession
           try {
             const sessions = await stripe.checkout.sessions.list({
               payment_intent: paymentIntentId,
             })
 
             if (sessions.data.length > 0) {
-              const checkoutSession = sessions.data[0]
+              checkoutSession = sessions.data[0]
 
-              console.log(
-                'ID para por no line items??????' + checkoutSession.id,
-              )
-
-              console.log(checkoutSession.metadata)
-              sessionId = checkoutSession.id
-              externalReference = checkoutSession.metadata.external_reference
-              productsIds = checkoutSession.metadata.product_ids
+              stringProductsIds = checkoutSession.metadata.product_ids
             } else {
               console.log('Nenhuma sessão encontrada para o Payment Intent')
             }
@@ -144,8 +139,9 @@ class NotificationController {
             console.error('Erro ao buscar sessão:', error)
           }
 
-          const lineItems =
-            await stripe.checkout.sessions.listLineItems(sessionId)
+          const lineItems = await stripe.checkout.sessions.listLineItems(
+            checkoutSession.id,
+          )
 
           console.log('_________LINE ITEMS 2:')
           lineItems.data.forEach((item, index) => {
@@ -154,7 +150,7 @@ class NotificationController {
 
           const foundPendingOrder = await PendingOrders.findOne({
             where: {
-              external_reference: externalReference,
+              external_reference: checkoutSession.metadata.external_reference,
             },
           })
 
@@ -181,6 +177,55 @@ class NotificationController {
           console.log('FOUND PENDING PAYER:')
           console.log(foundPendingPayer)
           console.log(JSON.stringify(foundPendingPayer))
+
+          const createPayer = await Payer.create({
+            name: foundPendingPayer.name,
+            cpf: foundPendingPayer.cpf,
+            email: foundPendingPayer.email,
+            phoneNumber: foundPendingPayer.phoneNumber,
+            recipient: foundPendingPayer.recipient,
+          })
+
+          console.log('Created Payer' + JSON.stringify(createPayer))
+
+          const createdDelivery = await Delivery.create({
+            idPayer: createPayer.dataValues.id,
+            state: foundPendingDelivery.state,
+            city: foundPendingDelivery.city,
+            neighborhood: foundPendingDelivery.neighborhood,
+            street: foundPendingDelivery.street,
+            houseNumber: foundPendingDelivery.houseNumber,
+            cep: foundPendingDelivery.cep,
+            complement: foundPendingDelivery.complement,
+          })
+
+          console.log('Created Delivery' + JSON.stringify(createdDelivery))
+
+          const createdOrder = await Order.create({
+            userId: foundPendingOrder.userId,
+            deliveryId: createdDelivery.dataValues.id,
+            status: 'Pedido realizado',
+            total: checkoutSession.amount_total / 100,
+          })
+
+          console.log(`Created Order: ${JSON.stringify(createdOrder)}`)
+
+          const productsIds = stringProductsIds.split(';').map(item => parseInt(item.split(':')[1], 10))
+
+          console.log(productsIds)
+
+          console.log("Orders_Products logs: ")
+
+          lineItems.data.forEach((item, index) => {
+            const createdOrdersProducts = await Orders_Products.create({
+              orderId: createdOrder.dataValues.id,
+              productId: productsIds[index],
+              quantity: item.quantity,
+              unitPrice: item.amount_total
+            })
+
+            console.log(`Created Orders_Products: ${createdOrdersProducts}`)
+          })
 
           // const products = []
 

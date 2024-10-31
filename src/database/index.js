@@ -10,6 +10,7 @@ import PendingOrders from '../app/models/PendingOrders.js'
 import Payer from '../app/models/Payer.js'
 import Delivery from '../app/models/Delivery.js'
 import PendingDelivery from '../app/models/PendingDelivery.js'
+import Orders_Products from '../app/models/Orders_Products.js'
 import PendingPayer from '../app/models/PendingPayer.js'
 
 const models = [
@@ -19,6 +20,7 @@ const models = [
   Order,
   PendingOrders,
   Payer,
+  Orders_Products
   Delivery,
   PendingDelivery,
   PendingPayer,
