@@ -139,7 +139,9 @@ class NotificationController {
             console.error('Erro ao buscar sessão:', error)
           }
 
-          console.log(`CHECKOUT SESSION: ${JSON.stringify(checkoutSession)}`)
+          console.log(
+            `CHECKOUT SESSION: ${JSON.stringify(checkoutSession, null, 2)}`,
+          )
 
           const lineItems = await stripe.checkout.sessions.listLineItems(
             checkoutSession.id,
