@@ -210,22 +210,32 @@ class NotificationController {
 
           console.log(`Created Order: ${JSON.stringify(createdOrder)}`)
 
-          const productsIds = stringProductsIds.split(';').map(item => parseInt(item.split(':')[1], 10))
+          const productsIds = stringProductsIds
+            .split(';')
+            .map((item) => parseInt(item.split(':')[1], 10))
 
           console.log(productsIds)
 
-          console.log("Orders_Products logs: ")
+          console.log('Orders_Products logs: ')
 
-          lineItems.data.forEach((item, index) => {
-            const createdOrdersProducts = await Orders_Products.create({
-              orderId: createdOrder.dataValues.id,
-              productId: productsIds[index],
-              quantity: item.quantity,
-              unitPrice: item.amount_total
-            })
+          async function processOrder(lineItems, createdOrder, productsIds) {
+            for (let index = 0; index < lineItems.data.length; index++) {
+              const item = lineItems.data[index]
 
-            console.log(`Created Orders_Products: ${createdOrdersProducts}`)
-          })
+              const createdOrdersProducts = await Orders_Products.create({
+                orderId: createdOrder.dataValues.id,
+                productId: productsIds[index],
+                quantity: item.quantity,
+                unitPrice: item.amount_total,
+              })
+
+              console.log(`Created Orders_Products: ${createdOrdersProducts}`)
+            }
+          }
+
+          processOrder(lineItems, createdOrder, productsIds).catch(
+            console.error,
+          )
 
           // const products = []
 
