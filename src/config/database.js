@@ -1,6 +1,12 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
 const configDatabase = {
   dialect: 'postgres',
-  url: 'postgresql://postgres:rAdFETUYpCCmfSSODPZFKPcNRdyGdTdI@autorack.proxy.rlwy.net:24767/railway',
+  host: 'localhost',
+  username: 'postgres',
+  password: process.env.LOCAL_POSTGRES_PASSWORD,
+  database: 'maris',
   define: {
     freezeTableName: true,
     timestamps: true,
