@@ -6,7 +6,7 @@ class Product extends Model {
         name: Sequelize.STRING,
         description: Sequelize.STRING,
         price: Sequelize.DECIMAL,
-        offer: Sequelize.BOOLEAN,
+        offerPercentage: Sequelize.BOOLEAN,
         path: Sequelize.STRING,
         categoryId: Sequelize.INTEGER,
         url: {
@@ -16,7 +16,7 @@ class Product extends Model {
           },
         },
       },
-      { sequelize },
+      { sequelize, tableName: 'Products' },
     )
 
     return this

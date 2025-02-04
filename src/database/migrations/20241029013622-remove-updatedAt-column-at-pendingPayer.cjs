@@ -9,7 +9,7 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     await queryInterface.addColumn('PendingPayer', 'updatedAt', {
       type: Sequelize.DATE,
-      allowNull: false,
+      allowNull: true,
     })
   },
 }

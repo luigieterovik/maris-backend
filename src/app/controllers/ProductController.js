@@ -4,6 +4,20 @@ import Product from '../models/Product.js'
 import User from '../models/User.js'
 import Category from '../models/Category.js'
 
+import {
+  S3Client,
+  PutObjectCommand,
+  CreateBucketCommand,
+  DeleteObjectCommand,
+  DeleteBucketCommand,
+  paginateListObjectsV2,
+  GetObjectCommand,
+} from '@aws-sdk/client-s3'
+
+import crypto from 'crypto'
+
+import s3 from '../../config/aws-s3.js'
+
 class ProductController {
   async store(req, res) {
     const { admin: isAdmin } = await User.findByPk(req.userId)
@@ -29,11 +43,27 @@ class ProductController {
     const { filename: path } = req.file
     const { name, description, price, categoryId, offer } = req.body
 
+    console.log(req.file)
+
+    const fileKey =
+      crypto.randomBytes(32).toString('hex') + '-' + req.file.originalname
+
+    const s3params = {
+      Bucket: process.env.BUCKET_NAME,
+      Key: fileKey,
+      Body: req.file.buffer,
+      ContentType: req.file.mimetype,
+    }
+
+    const s3command = new PutObjectCommand(s3params)
+    const awsResponse = await s3.send(s3command)
+    console.log(awsResponse)
+
     const productResponse = await Product.create({
       name,
       description,
       price,
-      path,
+      path: `https://${process.env.BUCKET_NAME}.s3.${process.env.BUCKET_REGION}.amazonaws.com/${fileKey}`,
       categoryId,
       offer,
     })

@@ -8,12 +8,13 @@ class Payer extends Model {
         cpf: Sequelize.STRING,
         email: Sequelize.STRING,
         phoneNumber: Sequelize.STRING,
+        recipient: Sequelize.STRING,
       },
       {
         sequelize,
         createdAt: 'createdAt',
         updatedAt: false,
-        tableName: 'Payer'
+        tableName: 'Payer',
       },
     )
 

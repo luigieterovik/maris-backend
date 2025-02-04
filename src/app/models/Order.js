@@ -5,26 +5,14 @@ class Order extends Model {
     super.init(
       {
         userId: Sequelize.UUID,
-        productId: Sequelize.INTEGER,
-        quantity: Sequelize.INTEGER,
+        deliveryId: Sequelize.INTEGER,
         status: Sequelize.STRING,
         total: Sequelize.DECIMAL,
       },
-      { sequelize },
+      { sequelize, tableName: 'Orders' },
     )
 
     return this
-  }
-
-  static associate(models) {
-    this.belongsTo(models.User, {
-      foreignKey: 'userId',
-      as: 'user',
-    })
-    this.belongsTo(models.Product, {
-      foreignKey: 'productId',
-      as: 'product',
-    })
   }
 }
 

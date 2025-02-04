@@ -44,6 +44,8 @@ class SessionController {
   async validateToken(req, res) {
     const { token } = req.body
 
+    console.log('TOKEN' + token)
+
     if (!token) {
       return res.status(400).json({ error: 'Token is required' })
     }
@@ -52,6 +54,8 @@ class SessionController {
       if (err) {
         return res.status(401).json({ error: 'Invalid token' })
       }
+
+      console.log(decoded)
 
       return res.status(200).json({ valid: true })
     })

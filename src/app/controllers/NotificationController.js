@@ -11,6 +11,9 @@ import Orders_Products from '../models/Orders_Products.js'
 import Payer from '../models/Payer.js'
 import User from '../models/User.js'
 
+import dotenv from 'dotenv'
+dotenv.config()
+
 class NotificationController {
   async handleMercadoPagoNotification(req, res) {
     const notification = req.body
@@ -102,22 +105,6 @@ class NotificationController {
       switch (event.type) {
         case 'payment_intent.succeeded': {
           const paymentIntentSucceeded = event.data.object
-
-          // // const customer = await stripe.customers.retrieve(
-          // //   paymentIntentSucceeded.customer,
-          // // )
-          // // const customerEmail = customer.email
-
-          // // const productDetailsString = customer.metadata.product_ids
-          // // const productsArray = productDetailsString.split(';')
-
-          // console.log(productDetailsString)
-
-          // const externalReference = customer.metadata.external_reference
-          // console.log(
-          //   '________________________-EXTERNAL REFERENCE STRIPE CUSTOMER: ' +
-          //     externalReference,
-          // ) // EXTERNAL REFERENCE
 
           const paymentIntentId = paymentIntentSucceeded.id
 
@@ -241,35 +228,6 @@ class NotificationController {
             console.error,
           )
 
-          // const products = []
-
-          // productsArray.forEach((productString) => {
-          //   const details = productString.split(',')
-
-          //   const productObject = details.reduce((acc, detail) => {
-          //     const [key, value] = detail.split(':')
-          //     if (key === 'id') acc.id = value
-          //     if (key === 'qt') acc.quantity = parseInt(value, 10)
-          //     if (key === 'pc') acc.price = parseInt(value, 10)
-          //     return acc
-          //   }, {})
-
-          //   products.push(productObject)
-          // })
-
-          // console.log(products)
-
-          // const user = await User.findOne({
-          //   where: { email: customerEmail },
-          //   attributes: ['id'],
-          // })
-
-          // const userId = user ? user.get('id') : null
-
-          // console.log(user)
-          // console.log(userId)
-
-          // await processOrder(products, userId)
           break
         }
 
