@@ -25,6 +25,8 @@ routes.post('/users', UserController.store)
 routes.post('/sessions', SessionController.store)
 routes.post('/recover', RecoverController.store)
 routes.post('/reset', UserController.updatePassword)
+routes.get('/catalog', ProductController.index)
+routes.get('/categories', CategoryController.index)
 
 routes.post('/validate-token', SessionController.validateToken)
 
@@ -40,11 +42,10 @@ routes.post('/pix', PaymentController.pix)
 
 routes.post('/catalog', upload.single('file'), ProductController.store)
 routes.put('/catalog/:id', upload.single('file'), ProductController.update)
-routes.get('/catalog', ProductController.index)
 
 routes.post('/categories', upload.single('file'), CategoryController.store)
-routes.get('/categories', CategoryController.index)
 routes.put('/categories/:id', upload.single('file'), CategoryController.update)
+routes.delete('/categories/:id', CategoryController.delete)
 
 routes.post('/orders', OrderController.store)
 routes.get('/orders', OrderController.index)

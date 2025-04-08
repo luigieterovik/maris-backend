@@ -48,9 +48,11 @@ class ProductController {
     const fileKey =
       crypto.randomBytes(32).toString('hex') + '-' + req.file.originalname
 
+    const awsFilesFolder = 'products'
+
     const s3params = {
       Bucket: process.env.BUCKET_NAME,
-      Key: fileKey,
+      Key: `${awsFilesFolder}/${fileKey}`,
       Body: req.file.buffer,
       ContentType: req.file.mimetype,
     }
@@ -63,7 +65,7 @@ class ProductController {
       name,
       description,
       price,
-      path: `https://${process.env.BUCKET_NAME}.s3.${process.env.BUCKET_REGION}.amazonaws.com/${fileKey}`,
+      path: `https://${process.env.BUCKET_NAME}.s3.${process.env.BUCKET_REGION}.amazonaws.com/${awsFilesFolder}/${fileKey}`,
       categoryId,
       offer,
     })
