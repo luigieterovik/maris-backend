@@ -31,7 +31,7 @@ class ProductController {
       description: Yup.string(),
       price: Yup.number().required(),
       categoryId: Yup.number(),
-      offer: Yup.bool(),
+      offerPercentage: Yup.number(),
     })
 
     try {
@@ -41,7 +41,7 @@ class ProductController {
     }
 
     const { filename: path } = req.file
-    const { name, description, price, categoryId, offer } = req.body
+    const { name, description, price, categoryId, offerPercentage } = req.body
 
     console.log(req.file)
 
@@ -67,7 +67,7 @@ class ProductController {
       price,
       path: `https://${process.env.BUCKET_NAME}.s3.${process.env.BUCKET_REGION}.amazonaws.com/${awsFilesFolder}/${fileKey}`,
       categoryId,
-      offer,
+      offerPercentage,
     })
 
     if (!productResponse)
