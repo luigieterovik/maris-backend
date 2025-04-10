@@ -42,6 +42,7 @@ routes.post('/pix', PaymentController.pix)
 
 routes.post('/catalog', upload.single('file'), ProductController.store)
 routes.put('/catalog/:id', upload.single('file'), ProductController.update)
+routes.delete('/catalog/:id', ProductController.delete)
 
 routes.post('/categories', upload.single('file'), CategoryController.store)
 routes.put('/categories/:id', upload.single('file'), CategoryController.update)

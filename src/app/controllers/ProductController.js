@@ -139,6 +139,27 @@ class ProductController {
 
     return res.status(200).json({ message: 'Product updated successfully' })
   }
+
+  async delete(req, res) {
+    const { admin: isAdmin } = await User.findByPk(req.userId)
+    if (!isAdmin)
+      return res
+        .status(401)
+        .json({ message: 'User is not authorized to access this resource' })
+
+    const { id } = req.params
+    const categoryExists = await Product.findByPk(id)
+
+    if (!categoryExists)
+      return res.status(400).json({ message: 'Category not found' })
+
+    const deleteResponse = await Product.destroy({ where: { id } })
+
+    if (!deleteResponse)
+      return res.status(500).json({ error: 'Failed to delete product' })
+
+    return res.status(200).json({ message: 'Product deleted successfully' })
+  }
 }
 
 export default new ProductController()
