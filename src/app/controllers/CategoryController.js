@@ -81,7 +81,7 @@ class CategoryController {
         .status(401)
         .json({ message: 'User is not authorized to access this resource' })
 
-    const schema = Yup.object().shape({ name: Yup().string() })
+    const schema = Yup.object().shape({ name: Yup.string() })
 
     try {
       schema.validateSync(req.body, { abortEarly: false })
