@@ -102,7 +102,7 @@ class ProductController {
       description: Yup.string(),
       price: Yup.number(),
       categoryId: Yup.number(),
-      offer: Yup.bool(),
+      offerPercentage: Yup.number(),
     })
 
     try {
@@ -120,7 +120,7 @@ class ProductController {
     let path
     if (req.file) path = req.file.filename
 
-    const { name, description, price, categoryId, offer } = req.body
+    const { name, description, price, categoryId, offerPercentage } = req.body
 
     const updateResponse = await Product.update(
       {
@@ -128,7 +128,7 @@ class ProductController {
         description,
         price,
         categoryId,
-        offer,
+        offerPercentage,
         path,
       },
       { where: { id } },
