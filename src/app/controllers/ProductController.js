@@ -90,6 +90,23 @@ class ProductController {
     return res.json(products)
   }
 
+  async findById(req, res) {
+    try {
+      const { id } = req.params
+
+      const product = await Product.findByPk(id)
+
+      if (!product) {
+        return res.status(404).json({ error: 'Produto não encontrado' })
+      }
+
+      return res.json(product)
+    } catch (error) {
+      console.error(error)
+      return res.status(500).json({ error: 'Erro ao buscar o produto' })
+    }
+  }
+
   async update(req, res) {
     const { admin: isAdmin } = await User.findByPk(req.userId)
     if (!isAdmin)

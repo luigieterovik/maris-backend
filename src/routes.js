@@ -26,6 +26,7 @@ routes.post('/sessions', SessionController.store)
 routes.post('/recover', RecoverController.store)
 routes.post('/reset', UserController.updatePassword)
 routes.get('/catalog', ProductController.index)
+routes.get('/catalog/:id', ProductController.findById)
 routes.get('/categories', CategoryController.index)
 
 routes.post('/validate-token', SessionController.validateToken)
