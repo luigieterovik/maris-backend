@@ -3,10 +3,7 @@ dotenv.config()
 
 const configDatabase = {
   dialect: 'postgres',
-  host: 'localhost',
-  username: 'postgres',
-  password: process.env.LOCAL_POSTGRES_PASSWORD,
-  database: 'maris',
+  url: process.env.DB_URL,
   define: {
     freezeTableName: true,
     timestamps: true,

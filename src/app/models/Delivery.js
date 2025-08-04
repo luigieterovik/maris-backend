@@ -22,6 +22,13 @@ class Delivery extends Model {
 
     return this
   }
+
+  static associate(models) {
+    this.belongsTo(models.Payer, {
+      foreignKey: 'idPayer',
+      as: 'payer',
+    })
+  }
 }
 
 export default Delivery

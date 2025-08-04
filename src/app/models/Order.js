@@ -14,6 +14,23 @@ class Order extends Model {
 
     return this
   }
+
+  static associate(models) {
+    this.belongsTo(models.User, {
+      foreignKey: 'userId',
+      as: 'user',
+    })
+
+    this.belongsTo(models.Delivery, {
+      foreignKey: 'deliveryId',
+      as: 'delivery',
+    })
+
+    this.hasMany(models.Orders_Products, {
+      foreignKey: 'orderId',
+      as: 'orders_product',
+    })
+  }
 }
 
 export default Order

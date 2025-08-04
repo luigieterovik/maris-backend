@@ -1,9 +1,12 @@
 import * as Yup from 'yup'
 
 import Order from '../models/Order.js'
+import Delivery from '../models/Delivery.js'
 import User from '../models/User.js'
+import Payer from '../models/Payer.js'
 import Product from '../models/Product.js'
 import Category from '../models/Category.js'
+import Orders_Products from '../models/Orders_Products.js'
 
 class OrderController {
   async store(req, res) {
@@ -49,14 +52,42 @@ class OrderController {
           attributes: ['name', 'email'],
         },
         {
-          model: Product,
-          as: 'product',
-          attributes: ['name', 'price', 'path'],
+          model: Orders_Products,
+          as: 'orders_product',
+          attributes: ['orderId', 'productId', 'quantity', 'unitPrice'],
           include: [
             {
-              model: Category,
-              as: 'category',
-              attributes: ['name'],
+              model: Product,
+              as: 'product',
+              attributes: ['name', 'description', 'price', 'path'],
+              include: [
+                {
+                  model: Category,
+                  as: 'category',
+                  attributes: ['name'],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          model: Delivery,
+          as: 'delivery',
+          attributes: [
+            'idPayer',
+            'state',
+            'city',
+            'neighborhood',
+            'street',
+            'houseNumber',
+            'cep',
+            'complement',
+          ],
+          include: [
+            {
+              model: Payer,
+              as: 'payer',
+              attributes: ['name', 'cpf', 'email', 'phoneNumber', 'recipient'],
             },
           ],
         },
