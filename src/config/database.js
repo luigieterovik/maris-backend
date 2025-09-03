@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const configDatabase = {
-  url: 'postgresql://postgres:yfTJjUWTBiDkfcbPNVQmOUzXrKPgsekK@ballast.proxy.rlwy.net:38189/railway',
+  url: process.env.DB_URL,
   dialect: 'postgres',
   define: {
     freezeTableName: true,
