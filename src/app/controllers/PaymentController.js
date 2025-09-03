@@ -17,20 +17,29 @@ class PaymentController {
     const client = new MercadoPagoConfig({
       accessToken: process.env.ACCESS_TOKEN_MERCADOPAGO,
     })
-
     const preference = new Preference(client)
 
-    const { transaction_amount, title, payer, items, statement_descriptor } =
-      req.body
+    const {
+      transaction_amount,
+      title,
+      payer,
+      items,
+      statement_descriptor,
+      payerData, // 👈 vem do front (mesmo shape do stripe)
+      deliveryData, // 👈 vem do front (mesmo shape do stripe)
+      userToken, // 👈 opcional, se quiser vincular userId como no stripe
+    } = req.body
 
-    console.log('Dados recebidos do frontend:', req.body)
+    console.log('PIX | body:', req.body)
 
     try {
+      // 1) Cria preferência PIX (mantive seu padrão)
+      const external_reference = v4()
       const body = {
         transaction_amount,
         description: title,
         payment_method_id: 'pix',
-        payer,
+        payer, // Mercado Pago payer (nome/email/doc)
         payment_methods: {
           excluded_payment_methods: [
             { id: 'credit_card' },
@@ -44,39 +53,103 @@ class PaymentController {
         },
         auto_return: 'approved',
         items,
-        external_reference: v4(),
+        external_reference,
         statement_descriptor,
       }
 
-      const requestOptions = {
-        idempotencyKey: v4(),
-      }
-
+      const requestOptions = { idempotencyKey: v4() }
       const paymentCreateResponse = await preference.create({
         body,
         requestOptions,
       })
+      console.log('PIX | preference.create response:', paymentCreateResponse)
 
-      console.log('Resposta do Mercado Pago:', paymentCreateResponse)
+      // 2) Upsert do pagador (igual ao stripe)
+      if (!payerData || !deliveryData) {
+        return res
+          .status(400)
+          .json({ error: 'payerData e deliveryData são obrigatórios para PIX' })
+      }
 
-      const pendingOrderResponse = await PendingOrders.create({
-        external_reference: body.external_reference,
-        email: body.payer.email,
+      const existingPayer = await PendingPayer.findOne({
+        where: {
+          name: payerData.fullName,
+          cpf: payerData.cpf,
+          email: payerData.email,
+          phoneNumber: payerData.phoneNumber,
+          recipient: deliveryData.recipient,
+        },
       })
 
-      if (!pendingOrderResponse)
-        return res.status(500).json({ message: 'Failed to save order' })
+      let pendingPayerId
+      if (existingPayer) {
+        pendingPayerId = existingPayer.dataValues.id
+      } else {
+        const pendingPayerResponse = await PendingPayer.create({
+          name: payerData.fullName,
+          cpf: payerData.cpf,
+          email: payerData.email,
+          phoneNumber: payerData.phoneNumber,
+          recipient: deliveryData.recipient,
+        })
+        pendingPayerId = pendingPayerResponse.dataValues.id
+      }
+      console.log(`PIX | PendingPayer ID: ${pendingPayerId}`)
 
+      // 3) Cria entrega pendente (igual ao stripe; note o nome dos campos)
+      const pendingDeliveryResponse = await PendingDelivery.create({
+        idPayer: pendingPayerId,
+        state: deliveryData.state,
+        city: deliveryData.city,
+        neighborhood: deliveryData.neighborhood,
+        street: deliveryData.address, // no stripe você salvou como "street"
+        houseNumber: deliveryData.houseNumber,
+        cep: deliveryData.cep,
+        complement: deliveryData.complement,
+      })
+
+      const pendingDeliveryId = pendingDeliveryResponse.dataValues.id
+      console.log(`PIX | PendingDelivery ID: ${pendingDeliveryId}`)
+
+      // 4) (opcional) pegar userId do token — mesmo padrão do stripe
+      let userId
+      if (userToken) {
+        try {
+          const tokenPayload = jwt.verify(userToken, process.env.JWT_SECRET)
+          userId = tokenPayload.id
+        } catch (err) {
+          console.error('PIX | Token inválido/expirado:', err)
+          // não barramos o fluxo; só seguimos sem userId
+        }
+      }
+
+      // 5) Cria PendingOrder com a FK obrigatória ✅
+      const pendingOrderResponse = await PendingOrders.create({
+        external_reference,
+        pendingDeliveryId, // 👈 AGORA NÃO É NULL
+        email: body.payer?.email, // se quiser manter o email
+        amount: transaction_amount,
+        userId, // opcional
+        status: 'PENDING',
+        payment_provider: 'MERCADO_PAGO',
+        payment_method: 'PIX',
+      })
+
+      if (!pendingOrderResponse) {
+        return res.status(500).json({ message: 'Failed to save order' })
+      }
+
+      // 6) Retorno — você já retornava init_point; mantive
       return res.status(200).json(paymentCreateResponse.init_point)
     } catch (err) {
       console.log(
-        'Erro:',
+        'PIX | Erro:',
         err.paymentCreateResponse
           ? err.paymentCreateResponse.data
           : err.message,
       )
       return res.status(500).json({
-        error: 'Failed to create payment',
+        error: 'Failed to create PIX payment',
         details: err.paymentCreateResponse
           ? err.paymentCreateResponse.data
           : err.message,
