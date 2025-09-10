@@ -20,6 +20,9 @@ const corsOptions = {
       allowed instanceof RegExp ? allowed.test(origin) : allowed === origin
     })
 
+    console.log(origin)
+    console.log(ok)
+
     if (ok) {
       cb(null, true)
     } else {
