@@ -7,15 +7,31 @@ import NotificationController from './app/controllers/NotificationController.js'
 
 import './database/index.js'
 
-const allowedOrigins = 
+const allowedOrigins = [
+  'https://maris-frontend.vercel.app',
+  /^https:\/\/[a-z0-9-]+\.ngrok-free\.app$/i,
+]
 
 const corsOptions = {
-  origin: [
-  'https://maris-frontend.vercel.app',
-  'https://de4a5702b502.ngrok-free.app',
-],
+  origin: (origin, cb) => {
+    if (!origin) return cb(null, true)
+
+    const ok = allowedOrigins.some((allowed) => {
+      allowed instanceof RegExp ? allowed.test(origin) : allowed === origin
+    })
+
+    if (ok) {
+      cb(null, true)
+    } else {
+      cb(new Error('Not allowed CORS'))
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'ngrok-skip-browser-warning'],
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'ngrok-skip-browser-warning',
+  ],
   credentials: true,
 }
 
