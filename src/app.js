@@ -17,7 +17,7 @@ const corsOptions = {
     if (!origin) return cb(null, true)
 
     const ok = allowedOrigins.some((allowed) => {
-      allowed instanceof RegExp ? allowed.test(origin) : allowed === origin
+      return allowed instanceof RegExp ? allowed.test(origin) : allowed === origin
     })
 
     console.log(origin)
