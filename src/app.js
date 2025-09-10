@@ -7,10 +7,15 @@ import NotificationController from './app/controllers/NotificationController.js'
 
 import './database/index.js'
 
+const allowedOrigins = 
+
 const corsOptions = {
-  origin: 'https://maris-frontend.vercel.app',
+  origin: [
+  'https://maris-frontend.vercel.app',
+  'https://de4a5702b502.ngrok-free.app',
+],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'ngrok-skip-browser-warning'],
   credentials: true,
 }
 
