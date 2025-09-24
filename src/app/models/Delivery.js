@@ -15,6 +15,7 @@ class Delivery extends Model {
       },
       {
         sequelize,
+        tableName: 'Delivery'
         createdAt: 'createdAt',
         updatedAt: false,
       },
