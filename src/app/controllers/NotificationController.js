@@ -79,7 +79,13 @@ class NotificationController {
 
           const userId = getUserIdByEmail(customerEmail)
 
-          const items = payment?.additional_info?.items || []
+          const rawItems = payment?.additional_info?.items || []
+
+          const items = rawItems.map((it, idx) => ({
+            title: String(it.title || 'Sem título'),
+            quantity: Number(it.quantity),
+            unit_price: Number(it.unit_price),
+          }))
 
           console.log(items)
 
