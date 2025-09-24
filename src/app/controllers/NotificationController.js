@@ -114,15 +114,6 @@ class NotificationController {
 
           console.log('Created Delivery' + JSON.stringify(createdDelivery))
 
-          const createdOrder = await Order.create({
-            userId: pendingOrder.userId,
-            deliveryId: createdDelivery.dataValues.id,
-            status: 'Pedido realizado',
-            total: checkoutSession.amount_total / 100,
-          })
-
-          console.log(`Created Order: ${JSON.stringify(createdOrder)}`)
-
           const rawItems = payment?.additional_info?.items || []
 
           const items = rawItems.map((it, idx) => ({
@@ -130,6 +121,19 @@ class NotificationController {
             quantity: Number(it.quantity),
             unit_price: Number(it.unit_price),
           }))
+
+          const total = items.reduce(
+            (acc, item) => acc + item.unit_price * item.quantity,
+            0,
+          )
+          const createdOrder = await Order.create({
+            userId: pendingOrder.userId,
+            deliveryId: createdDelivery.dataValues.id,
+            status: 'Pedido realizado',
+            total,
+          })
+
+          console.log(`Created Order: ${JSON.stringify(createdOrder)}`)
 
           console.log('ITEMS: ' + items)
 
