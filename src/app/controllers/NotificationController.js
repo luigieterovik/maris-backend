@@ -77,7 +77,7 @@ class NotificationController {
             JSON.stringify(searchResponse.data, null, 2),
           )
 
-          const userId = getUserIdByEmail(customerEmail)
+          const userId = await getUserIdByEmail(customerEmail)
 
           const rawItems = payment?.additional_info?.items || []
 
