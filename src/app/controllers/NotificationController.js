@@ -42,16 +42,17 @@ class NotificationController {
           console.log('Pagamento aprovado:', payment)
 
           const externalReference = payment.external_reference
-          const userId = await PendingOrders.findOne({
+          const userIdFromPendingOrder = await PendingOrders.findOne({
             where: { external_reference: externalReference },
             attributes: ['userId'],
           })
 
+          console.log(userIdFromPendingOrder)
+
           const customer = await User.findOne({
-            where: { id: userId.userId },
+            where: { id: userIdFromPendingOrder.userId },
             attributes: ['email'],
           })
-          
 
           const customerEmail = customer ? customer.get('email') : null
 
