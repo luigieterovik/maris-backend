@@ -42,23 +42,19 @@ class NotificationController {
           console.log('Pagamento aprovado:', payment)
 
           const externalReference = payment.external_reference
-          const userIdFromPendingOrder = await PendingOrders.findOne({
+          const pendingOrder = await PendingOrders.findOne({
             where: { external_reference: externalReference },
-            attributes: ['userId'],
           })
 
-          console.log(userIdFromPendingOrder)
+          console.log('PENDING ORDER: ' + pendingOrder)
 
           const customer = await User.findOne({
-            where: { id: userIdFromPendingOrder.userId },
+            where: { id: pendingOrder.userId },
             attributes: ['email'],
           })
 
           const customerEmail = customer ? customer.get('email') : null
 
-          console.log('Customer EMAIL:', customerEmail)
-
-          console.log(externalReference)
           console.log('CUstomer EMAIL::::::' + customerEmail)
 
           const searchResponse = await axios.get(
@@ -79,6 +75,54 @@ class NotificationController {
 
           const userId = await getUserIdByEmail(customerEmail)
 
+          const foundPendingDelivery = await PendingDelivery.findOne({
+            where: {
+              id: foundPendingOrder.pendingDeliveryId,
+            },
+          })
+
+          console.log('FOUND PENDING DEVLIERY: ' + foundPendingDelivery)
+
+          const foundPendingPayer = await PendingPayer.findOne({
+            where: {
+              id: foundPendingDelivery.idPayer,
+            },
+          })
+
+          console.log('FOUND PENDING PAYER: ' + foundPendingPayer)
+
+          const createPayer = await Payer.create({
+            name: foundPendingPayer.name,
+            cpf: foundPendingPayer.cpf,
+            email: foundPendingPayer.email,
+            phoneNumber: foundPendingPayer.phoneNumber,
+            recipient: foundPendingPayer.recipient,
+          })
+
+          console.log('Created Payer' + JSON.stringify(createPayer))
+
+          const createdDelivery = await Delivery.create({
+            idPayer: createPayer.dataValues.id,
+            state: foundPendingDelivery.state,
+            city: foundPendingDelivery.city,
+            neighborhood: foundPendingDelivery.neighborhood,
+            street: foundPendingDelivery.street,
+            houseNumber: foundPendingDelivery.houseNumber,
+            cep: foundPendingDelivery.cep,
+            complement: foundPendingDelivery.complement,
+          })
+
+          console.log('Created Delivery' + JSON.stringify(createdDelivery))
+
+          const createdOrder = await Order.create({
+            userId: foundPendingOrder.userId,
+            deliveryId: createdDelivery.dataValues.id,
+            status: 'Pedido realizado',
+            total: checkoutSession.amount_total / 100,
+          })
+
+          console.log(`Created Order: ${JSON.stringify(createdOrder)}`)
+
           const rawItems = payment?.additional_info?.items || []
 
           const items = rawItems.map((it, idx) => ({
@@ -87,7 +131,7 @@ class NotificationController {
             unit_price: Number(it.unit_price),
           }))
 
-          console.log(items)
+          console.log('ITEMS: ' + items)
 
           await processOrder(items, userId)
         }
