@@ -79,8 +79,7 @@ class NotificationController {
 
           const userId = getUserIdByEmail(customerEmail)
 
-          const items =
-            searchResponse.data.results[0]?.additional_info?.items || []
+          const items = payment?.additional_info?.items || []
 
           console.log(items)
 
