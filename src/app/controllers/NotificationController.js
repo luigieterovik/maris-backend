@@ -115,7 +115,7 @@ class NotificationController {
           console.log('Created Delivery' + JSON.stringify(createdDelivery))
 
           const createdOrder = await Order.create({
-            userId: foundPendingOrder.userId,
+            userId: pendingOrder.userId,
             deliveryId: createdDelivery.dataValues.id,
             status: 'Pedido realizado',
             total: checkoutSession.amount_total / 100,
