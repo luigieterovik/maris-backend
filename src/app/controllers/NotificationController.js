@@ -77,7 +77,7 @@ class NotificationController {
 
           const foundPendingDelivery = await PendingDelivery.findOne({
             where: {
-              id: foundPendingOrder.pendingDeliveryId,
+              id: pendingOrder.pendingDeliveryId,
             },
           })
 
