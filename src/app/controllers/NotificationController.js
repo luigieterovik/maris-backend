@@ -329,21 +329,30 @@ async function getUserIdByEmail(email) {
 }
 
 async function processOrder(items, userId) {
-  for (const item of items) {
-    const unitPrice = parseFloat(item.price)
-    const quantity = parseInt(item.quantity)
+  for (const [idx, item] of items.entries()) {
+    const unitPrice = Number(item.unit_price ?? item.price) // aceita unit_price (MP) ou price
+    const quantity = Number(item.quantity)
 
-    if (isNaN(unitPrice) || isNaN(quantity)) {
-      console.error(`Invalid price or quantity for item ${item.id}`)
+    if (
+      !Number.isInteger(quantity) ||
+      quantity <= 0 ||
+      !isFinite(unitPrice) ||
+      unitPrice <= 0
+    ) {
+      console.error(
+        `Invalid price or quantity for item ${item?.id ?? `idx-${idx}`}: qty=${item.quantity}, price=${item.unit_price ?? item.price}`,
+      )
       continue
     }
 
     const orderData = {
       userId,
-      productId: item.id,
+      productId: item.id ?? null, // se não vier id do produto, salva null ou resolve via catálogo
+      title: String(item.title ?? ''), // se quiser manter snapshot do nome
       quantity,
-      status: 'Aprovado',
+      unitPrice,
       total: unitPrice * quantity,
+      status: 'Aprovado',
     }
 
     await savePayment(orderData)
