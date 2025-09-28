@@ -268,7 +268,7 @@ class NotificationController {
                 orderId: createdOrder.dataValues.id,
                 productId: productsIds[index],
                 quantity: item.quantity,
-                unitPrice: item.amount_total,
+                unitPrice: item.amount_total / 100,
               })
 
               console.log(`Created Orders_Products: ${createdOrdersProducts}`)
