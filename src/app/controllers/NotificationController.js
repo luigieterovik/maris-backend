@@ -65,7 +65,9 @@ class NotificationController {
             },
           })
 
-          console.log('FOUND PENDING DEVLIERY: ' + foundPendingDelivery.toJSON())
+          console.log(
+            'FOUND PENDING DEVLIERY: ' + foundPendingDelivery.toJSON(),
+          )
 
           const foundPendingPayer = await PendingPayer.findOne({
             where: {
@@ -83,7 +85,7 @@ class NotificationController {
             recipient: foundPendingPayer.recipient,
           })
 
-          console.log('Created Payer' + JSON.stringify(createPayer))
+          console.log('Created Payer' + createPayer.toJSON())
 
           const createdDelivery = await Delivery.create({
             idPayer: createPayer.dataValues.id,
@@ -106,16 +108,14 @@ class NotificationController {
 
           console.log('Total amount: ' + total)
 
-          // const createdOrder = await Order.create({
-          //   userId: pendingOrder.userId,
-          //   deliveryId: createdDelivery.dataValues.id,
-          //   status: 'Pedido realizado',
-          //   total,
-          // })
+          const createdOrder = await Order.create({
+            userId,
+            status: 'Pedido realizado',
+            total,
+            deliveryId: createdDelivery.id,
+          })
 
-          // console.log(`Created Order: ${JSON.stringify(createdOrder)}`)
-
-          // console.log('ITEMS: ' + items.toJSON())
+          console.log('Created Order ' + createPayer.toJSON())
         }
       } catch (err) {
         console.error(
