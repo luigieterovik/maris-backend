@@ -163,7 +163,9 @@ class PaymentController {
 
       const { products } = req.body
 
-      const productsIds = products
+      console.log('Products: ' + JSON.stringify(products))
+
+      const productsIds = productsg
         .map((product) => `id:${product.id}`)
         .join(';')
 
@@ -175,6 +177,7 @@ class PaymentController {
         price_data: {
           currency: 'brl',
           product_data: {
+            id: product.id,
             name: product.name,
             images: [product.image],
           },
@@ -182,6 +185,8 @@ class PaymentController {
         },
         quantity: product.quantity,
       }))
+
+      console.log('LINE ITEMS: ' + JSON.stringify(lineItems))
 
       const external_reference = v4()
 
@@ -198,13 +203,13 @@ class PaymentController {
         },
       })
 
-      console.log(session)
+      console.log("SESSION: " JSON.stringify(session))
 
       const { payerData } = req.body
       const { deliveryData } = req.body
 
-      console.log(payerData)
-      console.log(deliveryData)
+      console.log("Payer data: " + payerData)
+      console.log("Delivery data: " + deliveryData)
 
       const existingPayer = await PendingPayer.findOne({
         where: {
