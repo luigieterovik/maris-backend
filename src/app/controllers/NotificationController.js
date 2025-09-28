@@ -46,34 +46,18 @@ class NotificationController {
             where: { external_reference: externalReference },
           })
 
-          console.log('PENDING ORDER: ' + pendingOrder)
-
           const customer = await User.findOne({
             where: { id: pendingOrder.userId },
             attributes: ['email'],
           })
 
-          const customerEmail = customer ? customer.get('email') : null
+          const customerEmail = customer.get('email')
 
           console.log('CUstomer EMAIL::::::' + customerEmail)
 
-          const searchResponse = await axios.get(
-            'https://api.mercadopago.com/v1/payments/search',
-            {
-              headers: {
-                Authorization: `Bearer ${process.env.ACCESS_TOKEN_MERCADOPAGO}`,
-              },
-              params: {
-                external_reference: externalReference,
-              },
-            },
-          )
-          console.log(
-            'MERCADO PAGO EXTERNAL_REFERENCE SEARCH:',
-            JSON.stringify(searchResponse.data, null, 2),
-          )
-
           const userId = await getUserIdByEmail(customerEmail)
+
+          console.log('USER ID::::::' + userId)
 
           const foundPendingDelivery = await PendingDelivery.findOne({
             where: {
@@ -116,28 +100,22 @@ class NotificationController {
 
           const rawItems = payment?.additional_info?.items || []
 
-          const items = rawItems.map((it, idx) => ({
-            title: String(it.title || 'Sem título'),
-            quantity: Number(it.quantity),
-            unit_price: Number(it.unit_price),
-          }))
+          console.log('ITEMS: ' + JSON.stringify(rawItems))
 
-          const total = items.reduce(
-            (acc, item) => acc + item.unit_price * item.quantity,
-            0,
-          )
-          const createdOrder = await Order.create({
-            userId: pendingOrder.userId,
-            deliveryId: createdDelivery.dataValues.id,
-            status: 'Pedido realizado',
-            total,
-          })
+          const total = payment.transaction_amount
 
-          console.log(`Created Order: ${JSON.stringify(createdOrder)}`)
+          console.log('Total amount: ' + total)
 
-          console.log('ITEMS: ' + items)
+          // const createdOrder = await Order.create({
+          //   userId: pendingOrder.userId,
+          //   deliveryId: createdDelivery.dataValues.id,
+          //   status: 'Pedido realizado',
+          //   total,
+          // })
 
-          await processOrder(items, userId)
+          // console.log(`Created Order: ${JSON.stringify(createdOrder)}`)
+
+          // console.log('ITEMS: ' + items.toJSON())
         }
       } catch (err) {
         console.error(
@@ -310,24 +288,6 @@ class NotificationController {
   }
 }
 
-async function savePayment(orderData) {
-  try {
-    const response = await Order.create({
-      userId: orderData.userId,
-      productId: orderData.productId,
-      quantity: orderData.quantity,
-      status: 'Aprovado',
-      total: orderData.total,
-    })
-
-    console.log(response)
-
-    console.log('Pagamento registrado com sucesso!')
-  } catch (err) {
-    console.error('Erro ao registrar pagamento:', err)
-  }
-}
-
 async function sendFailureEmail(paymentData) {
   try {
     const transporter = nodemailer.createTransport({
@@ -374,37 +334,6 @@ async function getUserIdByEmail(email) {
   }
 
   return userId
-}
-
-async function processOrder(items, userId) {
-  for (const [idx, item] of items.entries()) {
-    const unitPrice = Number(item.unit_price ?? item.price) // aceita unit_price (MP) ou price
-    const quantity = Number(item.quantity)
-
-    if (
-      !Number.isInteger(quantity) ||
-      quantity <= 0 ||
-      !isFinite(unitPrice) ||
-      unitPrice <= 0
-    ) {
-      console.error(
-        `Invalid price or quantity for item ${item?.id ?? `idx-${idx}`}: qty=${item.quantity}, price=${item.unit_price ?? item.price}`,
-      )
-      continue
-    }
-
-    const orderData = {
-      userId,
-      productId: item.id ?? null, // se não vier id do produto, salva null ou resolve via catálogo
-      title: String(item.title ?? ''), // se quiser manter snapshot do nome
-      quantity,
-      unitPrice,
-      total: unitPrice * quantity,
-      status: 'Aprovado',
-    }
-
-    await savePayment(orderData)
-  }
 }
 
 export default new NotificationController()
