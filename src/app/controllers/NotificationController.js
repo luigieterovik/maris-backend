@@ -115,7 +115,7 @@ class NotificationController {
             deliveryId: createdDelivery.id,
           })
 
-          console.log('Created Order ' + createPayer.toJSON())
+          console.log('Created Order ' + createdOrder.toJSON())
         }
       } catch (err) {
         console.error(
