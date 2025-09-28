@@ -100,7 +100,7 @@ class NotificationController {
 
           console.log('Created Delivery' + JSON.stringify(createdDelivery))
 
-          const products = payment?.additional_info?.items || []
+          const products = payment.additional_info.items
 
           console.log('ITEMS: ' + JSON.stringify(products))
 
@@ -116,19 +116,19 @@ class NotificationController {
           })
 
           console.log('Created Order ' + JSON.stringify(createdOrder))
-        }
 
-        for (const product of products) {
-          const createdOrderProduct = await Orders_Products.create({
-            orderId: createdOrder.id,
-            productId: product.id,
-            quantity: product.quantity,
-            unitPrice: product.unit_price,
-          })
+          for (const product of products) {
+            const createdOrderProduct = await Orders_Products.create({
+              orderId: createdOrder.id,
+              productId: product.id,
+              quantity: Number(product.quantity),
+              unitPrice: Number(product.unit_price),
+            })
 
-          console.log(
-            'Created Orders_Products ' + JSON.stringify(createdOrderProduct),
-          )
+            console.log(
+              'Created Orders_Products ' + JSON.stringify(createdOrderProduct),
+            )
+          }
         }
       } catch (err) {
         console.error(
