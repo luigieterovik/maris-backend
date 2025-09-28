@@ -177,7 +177,6 @@ class PaymentController {
         price_data: {
           currency: 'brl',
           product_data: {
-            id: product.id,
             name: product.name,
             images: [product.image],
           },
