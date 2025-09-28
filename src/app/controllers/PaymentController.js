@@ -165,7 +165,7 @@ class PaymentController {
 
       console.log('Products: ' + JSON.stringify(products))
 
-      const productsIds = productsg
+      const productsIds = products
         .map((product) => `id:${product.id}`)
         .join(';')
 
@@ -203,13 +203,13 @@ class PaymentController {
         },
       })
 
-      console.log("SESSION: " + JSON.stringify(session))
+      console.log('SESSION: ' + JSON.stringify(session))
 
       const { payerData } = req.body
       const { deliveryData } = req.body
 
-      console.log("Payer data: " + payerData)
-      console.log("Delivery data: " + deliveryData)
+      console.log('Payer data: ' + payerData)
+      console.log('Delivery data: ' + deliveryData)
 
       const existingPayer = await PendingPayer.findOne({
         where: {
