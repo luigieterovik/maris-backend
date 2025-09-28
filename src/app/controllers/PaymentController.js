@@ -203,7 +203,7 @@ class PaymentController {
         },
       })
 
-      console.log("SESSION: " JSON.stringify(session))
+      console.log("SESSION: " + JSON.stringify(session))
 
       const { payerData } = req.body
       const { deliveryData } = req.body
