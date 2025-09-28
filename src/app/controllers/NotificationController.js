@@ -65,7 +65,7 @@ class NotificationController {
             },
           })
 
-          console.log('FOUND PENDING DEVLIERY: ' + foundPendingDelivery)
+          console.log('FOUND PENDING DEVLIERY: ' + foundPendingDelivery.toJSON())
 
           const foundPendingPayer = await PendingPayer.findOne({
             where: {
@@ -73,7 +73,7 @@ class NotificationController {
             },
           })
 
-          console.log('FOUND PENDING PAYER: ' + foundPendingPayer)
+          console.log('FOUND PENDING PAYER: ' + foundPendingPayer.toJSON())
 
           const createPayer = await Payer.create({
             name: foundPendingPayer.name,
