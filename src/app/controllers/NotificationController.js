@@ -85,7 +85,7 @@ class NotificationController {
             recipient: foundPendingPayer.recipient,
           })
 
-          console.log('Created Payer' + createPayer.toJSON())
+          console.log('Created Payer' + JSON.stringify(createPayer))
 
           const createdDelivery = await Delivery.create({
             idPayer: createPayer.dataValues.id,
@@ -115,7 +115,7 @@ class NotificationController {
             deliveryId: createdDelivery.id,
           })
 
-          console.log('Created Order ' + createdOrder.toJSON())
+          console.log('Created Order ' + JSON.stringify(createdOrder))
         }
       } catch (err) {
         console.error(
