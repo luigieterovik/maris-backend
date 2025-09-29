@@ -17,7 +17,9 @@ const corsOptions = {
     if (!origin) return cb(null, true)
 
     const ok = allowedOrigins.some((allowed) => {
-      return allowed instanceof RegExp ? allowed.test(origin) : allowed === origin
+      return allowed instanceof RegExp
+        ? allowed.test(origin)
+        : allowed === origin
     })
 
     console.log(origin)
@@ -29,7 +31,7 @@ const corsOptions = {
       cb(new Error('Not allowed CORS'))
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: [
     'Content-Type',
     'Authorization',
